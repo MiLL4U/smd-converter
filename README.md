@@ -1,2 +1,37 @@
-# smd-converter
-GUI application to convert smd files to Igor Pro files (Igor binary wave)
+# SMD Converter
+GUI application to convert smd files to [Igor Pro](https://www.wavemetrics.com/) files (Igor binary wave)
+
+## Installation
+### Install with pip
+1. download wheel package from https://github.com/MiLL4U/ibwpy/tree/main/wheel_package
+
+2. Install ibwpy with pip
+```bash
+$ python -m pip install smdconverter-x.y.z-py3-none-any.whl
+```
+<span style="color: #FFAAAA">(replace x.y.z with the version of ibwpy which you downloaded)</span>
+
+### Install with git clone
+1. Clone this repository
+
+```bash
+$ git clone https://github.com/MiLL4U/smd-converter.git
+```
+
+2. Go into the repository
+
+```bash
+$ cd smd-converter
+```
+
+3. Install SMD Converter with setup.py
+
+```bash
+$ python setup.py install
+```
+
+## Usage
+Launch GUI application with:
+```bash
+$ python -m smdconverter
+```
