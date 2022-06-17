@@ -38,3 +38,7 @@ Launch GUI application with:
 ```bash
 $ python -m smdconverter
 ```
+or:
+```bash
+$ python launch.py
+```
