@@ -3,7 +3,7 @@ GUI application to convert smd files to [Igor Pro](https://www.wavemetrics.com/)
 
 ## Installation
 ### Install with pip
-1. download wheel package from https://github.com/MiLL4U/ibwpy/tree/main/wheel_package
+1. download wheel package from https://github.com/MiLL4U/smd-converter/tree/main/wheel_package
 
 2. Install ibwpy with pip
 ```bash
