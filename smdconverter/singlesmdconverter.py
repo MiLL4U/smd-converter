@@ -18,7 +18,7 @@ from typing_extensions import Literal
 from .smdibwcnv import SimpledSMDIBWConverter
 from .smdparser import SPECTRAL_UNITS, SimpledSMDParser, SpectralUnit
 
-VERSION = "1.0.0"
+VERSION = "1.1.0"
 ROOT_TITLE = "SMD Converter"
 
 FILE_TYPES = (
