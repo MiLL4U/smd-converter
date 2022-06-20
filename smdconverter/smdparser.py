@@ -107,6 +107,16 @@ class FrameOptions(HeaderDict):
         wl_str = self.data['OmuLaserWLnm']
         return float(wl_str)
 
+    @property
+    def grating_groove(self) -> int:
+        groove_str = self.data['OmuGratingGroove']
+        return int(groove_str)
+
+    @property
+    def central_wavelength(self) -> float:
+        central_wl_str = self.data['OmuCentralWaveLengthNM']
+        return float(central_wl_str)
+
 
 class Stage3DParameters(HeaderDict):
     """handle Stage3DParameters data in a xml header of smd file
@@ -236,6 +246,11 @@ class ChannelInfo(HeaderDict):
         array_str = self.data['ChannelAxisArray']
         return np.fromstring(array_str, sep=" ", dtype=DTYPE)
 
+    @property
+    def informations(self) -> List[str]:
+        information_dict: Dict[str, str] = self.data['ChannelInfo']
+        return list(information_dict.values())
+
 
 class SMDParser:
     """Parser of any types of smd file
@@ -263,12 +278,20 @@ class SMDParser:
         self.__body_buffer = body_buf
 
     @property
+    def creation_datetime(self) -> datetime.datetime:
+        return self.header.frame_header.creation_datetime
+
+    @property
     def excite_nm(self) -> float:
         return self.header.frame_options.excitation_wavelength
 
     @property
-    def creation_datetime(self) -> datetime.datetime:
-        return self.header.frame_header.creation_datetime
+    def grating_groove(self) -> int:
+        return self.header.frame_options.grating_groove
+
+    @property
+    def central_wavelength(self) -> float:
+        return self.header.frame_options.central_wavelength
 
     @property
     def body_buffer(self) -> bytes:

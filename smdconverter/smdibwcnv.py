@@ -1,5 +1,6 @@
 from .smdparser import SpectralUnit
 from .smdparser import SimpledSMDParser
+from .notegen import IBWNoteGenerator
 import ibwpy as ip
 from ibwpy.main import BinaryWave5
 import numpy as np
@@ -31,6 +32,10 @@ class SimpledSMDIBWConverter:
         for i, axis in enumerate(IBW_SPATIAL_AXIS):
             ibw.set_axis_unit(i, spatial_units[axis])
             ibw.set_axis_scale(i, *spatial_scales[axis])
+
+        # set note to ibw
+        ibw.set_note(self.__make_note(detector_id=detector_id))
+
         return ibw
 
     def make_spectral_axis(
@@ -42,6 +47,14 @@ class SimpledSMDIBWConverter:
 
         # ibw.set_data_unit(unit)
         return ibw
+
+    def __make_note(self, detector_id: int = None) -> str:
+        """generate note of ibw"""
+        generator = IBWNoteGenerator(self.smd_data)
+        if detector_id:
+            generator.set_detector_id(detector_id)
+        note = generator.generate()
+        return note
 
     def __transpose_spatial_axis(self, src: np.ndarray) -> np.ndarray:
         """transpose axis of spatial dimension from smd to ibwo format

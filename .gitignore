@@ -132,3 +132,7 @@ dmypy.json
 # scripts for PyInstaller
 pyinstaller_build.ps1
 hook-tkinterdnd2.py
+
+# temporal files for development
+sample_smd/
+smdconverter_test.py
