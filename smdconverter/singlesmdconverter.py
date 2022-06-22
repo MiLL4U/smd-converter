@@ -15,6 +15,8 @@ from typing_extensions import Literal
 
 from .smdparser import SPECTRAL_UNITS
 from .convertjob import ConvertJob
+from .appsettings import ApplicationSettings
+from .settingwndw import SettingsWindow
 
 VERSION = "1.2.0"
 ROOT_TITLE = "SMD Converter"
@@ -398,6 +400,7 @@ class App(tkdnd.Tk):
         # variables
         self.jobs: List[ConvertJob] = []
         self.dst_dir = tk.StringVar(value="")
+        self.__settings = ApplicationSettings()
 
         self.__create_widgets()
         self.update_idletasks()  # required for set minsize dynamically
@@ -617,7 +620,7 @@ class App(tkdnd.Tk):
         self.job_list.select_job(selected_job)
 
     def show_settings_window(self) -> None:
-        print("test")
+        self.setting_window = SettingsWindow(self, self.__settings)
 
     def disable_opbuttons(self) -> None:
         """disable operation buttons which are available only when job(s) exist
