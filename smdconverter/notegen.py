@@ -32,7 +32,7 @@ class IBWNoteGenerator:
         res = "\n".join(contents)
         return res
 
-    # following properties are contents of note
+    # **following properties are contents of note**
     @property
     def acquisition_datetime(self) -> str:
         """return string of date of acquisition"""

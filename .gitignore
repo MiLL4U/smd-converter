@@ -136,3 +136,4 @@ hook-tkinterdnd2.py
 # temporal files for development
 sample_smd/
 smdconverter_test.py
+.vscode/
