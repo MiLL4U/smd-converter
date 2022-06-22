@@ -18,6 +18,9 @@ from .convertjob import ConvertJob
 
 VERSION = "1.2.0"
 ROOT_TITLE = "SMD Converter"
+GITHUB_URL = "https://github.com/MiLL4U/smd-converter/releases"
+LAUNCH_MSG = f"{ROOT_TITLE} {VERSION}\n" + \
+    "Latest release is available at:\n  " + GITHUB_URL + "\n"
 
 FILE_TYPES = (
     ("SMD spectral data", '*.smd'),
@@ -404,7 +407,7 @@ class App(tkdnd.Tk):
         self.drop_target_register(tkdnd.DND_FILES)
         self.dnd_bind('<<Drop>>', self.dropped)
 
-        print(f"{ROOT_TITLE} {VERSION}\n")
+        print(LAUNCH_MSG)
         print("Please open smd files.")
 
     def __create_widgets(self):
