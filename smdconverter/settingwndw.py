@@ -12,7 +12,7 @@ class SettingsWindow(tk.Toplevel):
         self.title("Sub window")
         self.geometry("300x300")
         self.__create_widgets()
-        self.grab_set()  # make this modal window
+        self.grab_set()  # make this window modal
         self.transient(self.master)  # Disable this window on the taskbar
 
         # variables
