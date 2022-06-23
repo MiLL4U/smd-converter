@@ -137,3 +137,4 @@ hook-tkinterdnd2.py
 sample_smd/
 smdconverter_test.py
 .vscode/
+launch.ps1
