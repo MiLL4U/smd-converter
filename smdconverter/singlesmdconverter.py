@@ -22,6 +22,7 @@ from .settingwndw import SettingsWindow
 
 ROOT_TITLE = "SMD Converter"
 LAUNCH_MSG = f"{ROOT_TITLE} {VERSION}\n" + \
+    "Copyright (c) 2022 Hiroaki Takahashi.\n\n" + \
     "Latest release is available at:\n  " + GITHUB_URL + "\n"
 
 FILE_TYPES = (
