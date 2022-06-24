@@ -29,6 +29,15 @@ class ConvertJob:
         self.__selected_detector = self.detector_ids[0]
 
     @property
+    def smd_data(self) -> SimpledSMDParser:
+        """getter of source smd data (SimpledSMDParser)
+
+        Returns:
+            SimpledSMDParser: source smd data
+        """
+        return self.__smd_data
+
+    @property
     def selected_detector(self) -> int:
         """returns index of detector currently selected
 

@@ -1,8 +1,10 @@
 import tkinter as tk
 from tkinter import ttk
+from tkinter.messagebox import showinfo
 from typing import Any, Dict, List
 
 from .convertjob import ConvertJob
+from .notegen import IBWNoteGenerator
 
 JOBLIST_COLUMNS = ('src_file', 'detector_name', 'shape',
                    'date', 'out_name')
@@ -29,6 +31,7 @@ class JobList(ttk.Treeview):
         super().__init__(columns=JOBLIST_COLUMNS, selectmode=tk.BROWSE,
                          show='headings', *args, **kwargs)
         self.bind('<<TreeviewSelect>>', self.handle_item_select)
+        self.bind('<Double-Button-1>', self.handle_doubleclick)
 
         # variables
         self.jobs = jobs
@@ -75,3 +78,7 @@ class JobList(ttk.Treeview):
 
     def handle_item_select(self, event) -> None:
         self.select_cmd(self.selected_job)
+
+    def handle_doubleclick(self, event) -> None:
+        note = IBWNoteGenerator(self.selected_job.smd_data).generate()
+        showinfo(title="Information", message=note)
