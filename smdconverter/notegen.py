@@ -56,8 +56,8 @@ class IBWNoteGenerator:
 
     @property
     def grating_infos(self) -> str:
-        """return string of informations about grating"""
-        heading = HEADING_FMT.format("Grating informations")
+        """return string of information about grating"""
+        heading = HEADING_FMT.format("Grating information")
 
         grating_groove = self.__smd_data.grating_groove
         item_1 = ITEM_LV1_FMT.format("Groove number", str(grating_groove))
@@ -71,13 +71,13 @@ class IBWNoteGenerator:
 
     @property
     def channel_infos(self) -> str:
-        """Return string of informations about channel.
+        """Return string of information about channel.
         Information about each channel is listed as a string
         in the xml header of smd files.
         This method returns those strings in the same order
         as they were originally listed.
         """
-        heading = HEADING_FMT.format("Channel informations")
+        heading = HEADING_FMT.format("Channel information")
 
         informations = self.selected_detector.informations
         rows = [INDENT_LV1 + information for information in informations]
