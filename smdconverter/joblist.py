@@ -80,5 +80,9 @@ class JobList(ttk.Treeview):
         self.select_cmd(self.selected_job)
 
     def handle_doubleclick(self, event) -> None:
-        note = IBWNoteGenerator(self.selected_job.smd_data).generate()
+        selected_job = self.selected_job
+        note_gen = IBWNoteGenerator(selected_job.smd_data)
+        note_gen.set_detector_id(selected_job.selected_detector)
+        note = note_gen.generate()
+
         showinfo(title="Information", message=note)
