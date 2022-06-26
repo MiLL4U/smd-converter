@@ -89,7 +89,8 @@ class App(tkdnd.Tk):
         op_commands: Dict[str, Callable] = {
             'open': self.open_smd, 'remove': self.remove_job,
             'clear': self.clear_jobs, 'convert': self.convert,
-            'settings': self.show_settings_window, 'exit': self.destroy}
+            # 'settings': self.show_settings_window,
+            'exit': self.destroy}
 
         self.opbutton_arr = OperationButtonArray(
             self, commands=op_commands, command_texts=OPERATION_BUTTON_TEXTS)
@@ -145,6 +146,8 @@ class App(tkdnd.Tk):
     def __set_jobs(self, file_names: Tuple[str]):
         opened = False
         for file_name in file_names:
+            # TODO: append multiple jobs when get smd file
+            # with multiple detectors? (togglable with settings window)
             wave_name, extension = os.path.splitext(
                 os.path.basename(file_name))
             if extension != '.smd':
