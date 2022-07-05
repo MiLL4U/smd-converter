@@ -7,7 +7,7 @@ def _requires_from_file(filename):
 
 setuptools.setup(
     name="smdconverter",
-    version="1.1.0",
+    version="1.1.1",
     install_requires=_requires_from_file('requirements.txt'),
     author="Hiroaki Takahashi",
     author_email="aphiloboe@gmail.com",
