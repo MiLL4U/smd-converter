@@ -168,6 +168,9 @@ class App(tkdnd.Tk):
                 print("Warning: all characters in name must be"
                       "alphabet, digit, or underscore")
 
+            # TODO: auto formatting wave_name
+            # (corresponds to detector and ApplicationSettings)
+
             # avoid name confliction
             exist_names = self.output_names
             alter_name = wave_name

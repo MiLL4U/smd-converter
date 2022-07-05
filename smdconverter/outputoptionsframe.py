@@ -164,6 +164,8 @@ class OutputOptionsFrame(ttk.LabelFrame):
                 arr = self.current_job.spectral_axis_array(unit)
                 self.spaxis_region_text.set(f"{arr[0]:.1f} ~ {arr[-1]:.1f}")
                 self.sp_outname.set(DEFAULT_SPECTRAL_AXIS_NAMES[unit])
+                # TODO: auto formatting sp_outname (include datetime?)
+                # (using ApplicationSettings?)
 
                 self.unit_cb.configure(state='readonly')
                 self.sp_outname_entry.configure(state=tk.NORMAL)

@@ -5,6 +5,7 @@ from .appsettings import ApplicationSettings
 
 
 class SettingsWindow(tk.Toplevel):
+    # TODO: implement settings window
     def __init__(self, master: tk.Misc, settings: ApplicationSettings,
                  *args, **kwargs):
         kwargs['master'] = master
