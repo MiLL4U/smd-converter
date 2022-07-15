@@ -138,3 +138,4 @@ sample_smd/
 smdconverter_test.py
 .vscode/
 launch.ps1
+settings.json

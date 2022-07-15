@@ -8,3 +8,6 @@ Direction = Literal['Up', 'Down']
 
 # layout options
 PADDING_OPTIONS = {'padx': 5, 'pady': 5}
+
+# file paths
+SETTINGS_JSON_PATH = "settings.json"
