@@ -1,30 +1,57 @@
 import tkinter as tk
 from tkinter import ttk
 
+from .constants import PADDING_OPTIONS
 from .appsettings import ApplicationSettings
+from .okcancelbuttonarray import OKCancelButtonArray
 
 
 class SettingsWindow(tk.Toplevel):
     # TODO: implement settings window
     def __init__(self, master: tk.Misc, settings: ApplicationSettings,
                  *args, **kwargs):
-        kwargs['master'] = master
+        kwargs['master'] = master  # TODO: can be refactored?
         super().__init__(*args, **kwargs)
 
-        self.title("Sub window")
-        self.geometry("300x300")
+        self.title("Settings")
+
+        self.columnconfigure(0, weight=1)
+
         self.__create_widgets()
         self.grab_set()  # make this window modal
         self.transient(self.master)  # Disable this window on the taskbar
+        self.resizable(False, False)
 
         # variables
         self.__settings = settings
 
     def __create_widgets(self):
-        self.close_btn = ttk.Button(
-            self, text="Close sub window",
-            command=self.__handle_close_btn)
-        self.close_btn.pack()
+        self.general_frame = GeneralSettingsFrame(self)
+        self.general_frame.grid(
+            row=0, column=0, sticky=tk.NSEW, **PADDING_OPTIONS)
 
-    def __handle_close_btn(self):
+        self.okcancel_btns = OKCancelButtonArray(
+            self, self.__handle_ok_btn, self.__handle_cancel_btn)
+        self.okcancel_btns.grid(
+            row=2, column=0, sticky=tk.EW, **PADDING_OPTIONS)
+
+    def __handle_ok_btn(self):
+        print("ok")
+
+    def __handle_cancel_btn(self):
         self.destroy()
+
+
+class GeneralSettingsFrame(ttk.LabelFrame):
+    def __init__(self, master: tk.Misc,
+                 *args, **kwargs) -> None:
+        kwargs['master'] = master
+        super().__init__(text='General Settings',
+                         *args, **kwargs)
+
+        self.__create_widgets()
+
+    def __create_widgets(self) -> None:
+        self.multijob_chkbox = ttk.Checkbutton(
+            self, text='Add multiple jobs when multiple detectors are found')
+        self.multijob_chkbox.grid(row=0, column=0, **PADDING_OPTIONS)

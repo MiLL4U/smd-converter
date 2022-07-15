@@ -89,7 +89,7 @@ class App(tkdnd.Tk):
         op_commands: Dict[str, Callable] = {
             'open': self.open_smd, 'remove': self.remove_job,
             'clear': self.clear_jobs, 'convert': self.convert,
-            # 'settings': self.show_settings_window,
+            'settings': self.show_settings_window,
             'exit': self.destroy}
 
         self.opbutton_arr = OperationButtonArray(
