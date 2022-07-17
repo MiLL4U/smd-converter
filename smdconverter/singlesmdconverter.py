@@ -41,19 +41,6 @@ OPERATION_BUTTON_TEXTS = {'open': "Open...", 'remove': "Remove",
                           'settings': "Settings...", 'exit': "Exit"}
 
 
-# def uniformize_grids(widget: tk.Misc):
-#     """set weight of all columns and rows to 1
-
-#     Args:
-#         master (tk.Misc): widget which settings to be changed
-#     """
-#     columns, rows = widget.grid_size()
-#     for column in range(columns):
-#         widget.columnconfigure(column, weight=1)
-#     for row in range(rows):
-#         widget.rowconfigure(row, weight=1)
-
-
 class App(tkdnd.Tk):
     def __init__(self):
         super().__init__()
