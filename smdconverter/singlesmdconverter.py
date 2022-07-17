@@ -11,7 +11,8 @@ from typing import Callable, Dict, List, Tuple, Union
 import tkinterdnd2 as tkdnd
 from ibwpy.main import BinaryWaveHeader5
 
-import constants as cst
+from .constants import (GITHUB_URL, PADDING_OPTIONS, SETTINGS_JSON_PATH,
+                        VERSION, Direction)
 
 from .appsettings import ApplicationSettingsHandler
 from .convertjob import ConvertJob
@@ -22,9 +23,9 @@ from .outputoptionsframe import OutputOptionsFrame
 from .settingwndw import SettingsWindow
 
 ROOT_TITLE = "SMD Converter"
-LAUNCH_MSG = f"{ROOT_TITLE} {cst.VERSION}\n" + \
+LAUNCH_MSG = f"{ROOT_TITLE} {VERSION}\n" + \
     "Copyright (c) 2022 Hiroaki Takahashi.\n\n" + \
-    "Latest release is available at:\n  " + cst.GITHUB_URL + "\n"
+    "Latest release is available at:\n  " + GITHUB_URL + "\n"
 
 FILE_TYPES = (
     ("SMD spectral data", '*.smd'),
@@ -45,7 +46,7 @@ class App(tkdnd.Tk):
     def __init__(self):
         super().__init__()
 
-        self.title(f"{ROOT_TITLE} {cst.VERSION}")
+        self.title(f"{ROOT_TITLE} {VERSION}")
 
         # grid settings
         self.columnconfigure(0, weight=1)  # column for widgets
@@ -60,7 +61,7 @@ class App(tkdnd.Tk):
         self.jobs: List[ConvertJob] = []
         self.dst_dir = tk.StringVar(value="")
         settings_handler = ApplicationSettingsHandler(
-            cst.SETTINGS_JSON_PATH)
+            SETTINGS_JSON_PATH)
         self.__settings = settings_handler.load()
 
         self.__create_widgets()
@@ -87,12 +88,12 @@ class App(tkdnd.Tk):
         self.disable_opbuttons()
         self.opbutton_arr.grid(
             row=0, column=0, columnspan=2,
-            sticky=tk.NSEW, **cst.PADDING_OPTIONS)
+            sticky=tk.NSEW, **PADDING_OPTIONS)
 
         # list of jobs
         self.job_list = JobList(self, self.jobs, self.handle_select_job)
         self.job_list.grid(
-            row=1, column=0, sticky=tk.NSEW, **cst.PADDING_OPTIONS)
+            row=1, column=0, sticky=tk.NSEW, **PADDING_OPTIONS)
 
         # scroll bar of job list
         self.joblist_scrl = ttk.Scrollbar(
@@ -106,13 +107,13 @@ class App(tkdnd.Tk):
             seek_cmd=self.seek_job, settings=self.__settings)
         self.outputopt_frame.grid(
             row=3, column=0, columnspan=2,
-            sticky=tk.NSEW, **cst.PADDING_OPTIONS)
+            sticky=tk.NSEW, **PADDING_OPTIONS)
 
         # destination selector
         self.dst_selector = DestinationSelector(self, dst_var=self.dst_dir)
         self.dst_selector.grid(
             row=4, column=0, columnspan=2,
-            sticky=tk.NSEW, **cst.PADDING_OPTIONS)
+            sticky=tk.NSEW, **PADDING_OPTIONS)
 
     def open_smd(self):
         file_names = self.__ask_filenames()
@@ -272,7 +273,7 @@ class App(tkdnd.Tk):
         self.opbutton_arr.enable('remove')
         self.outputopt_frame.update_target_job(job)
 
-    def seek_job(self, direction: cst.Direction) -> None:
+    def seek_job(self, direction: Direction) -> None:
         cur_job_idx = self.jobs.index(self.job_list.selected_job)
         last_job_idx = len(self.jobs) - 1
 
