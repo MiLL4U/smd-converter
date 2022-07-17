@@ -10,40 +10,32 @@ DEFAULT_NAME_FMT = "wave{}"
 class IBWNameFormatter:
     def __init__(self, job: ConvertJob, settings: ApplicationSettings,
                  print_warning: bool = True) -> None:
-        self.__job = job
-        self.__settings = settings
-        self.__print_warning = print_warning
-
-    @property
-    def job(self) -> ConvertJob:
-        return self.__job
-
-    @property
-    def settings(self) -> ApplicationSettings:
-        return self.__settings
+        self._job = job
+        self._settings = settings
+        self._print_warning = print_warning
 
     def update_settings(self, settings: ApplicationSettings):
-        self.__settings = settings
+        self._settings = settings
 
     def format_original_name(self, name_fmt: str) -> str:
         org_name, _ = os.path.splitext(
-                os.path.basename(self.__job.src_path))
+                os.path.basename(self._job.src_path))
         return name_fmt.replace("%O", org_name)
 
     def format_acq_datetime(self, name_fmt: str) -> str:
-        dt = self.__job.creation_time
+        dt = self._job.creation_time
         return datetime.datetime.strftime(dt, name_fmt)
 
     def validate_first_character(self, name: str) -> str:
         if not name[0].isalpha():
             name = DEFAULT_NAME_FMT.format(name)
-            if self.__print_warning:
+            if self._print_warning:
                 print("Warning: wave name must start with an alphabet")
         return name
 
     def replace_space(self, name: str) -> str:
         res = name.replace(" ", "_")
-        if res != name and self.__print_warning:
+        if res != name and self._print_warning:
             print("Warning: space(s) in wave name were "
                   "replaced with underscore(s)")
         return res
@@ -53,7 +45,7 @@ class IBWNameFormatter:
                             if chr_.encode('utf-8').isalnum()
                             or chr_ == '_']
         res = "".join(valid_characters)
-        if res != name and self.__print_warning:
+        if res != name and self._print_warning:
             print("Warning: all characters in name must be"
                   "alphabet, digit, or underscore")
         return res
@@ -78,7 +70,7 @@ class SpectralAxisIBWNameFormatter(IBWNameFormatter):
         super().__init__(job, settings, print_warning)
 
     def get_name(self, unit: str) -> str:
-        name_fmt = self.settings.spectral_axis_name_formats[unit]
+        name_fmt = self._settings.spectral_axis_name_formats[unit]
         res = self.format_name(name_fmt)
         res = self.validate_name(res)
 
@@ -91,8 +83,8 @@ class SpectralDataIBWNameFormatter(IBWNameFormatter):
         super().__init__(job, settings, print_warning)
 
     def get_name(self, exist_names: Tuple[str]) -> str:
-        detector_name = self.job.selected_detector_name
-        name_fmt = self.settings.ibw_name_formats[detector_name]
+        detector_name = self._job.selected_detector_name
+        name_fmt = self._settings.ibw_name_formats[detector_name]
         res = self.format_name(name_fmt)
         res = self.validate_name(res)
         res = self.unique_name(res, exist_names)
@@ -106,7 +98,7 @@ class SpectralDataIBWNameFormatter(IBWNameFormatter):
         while res in exist_names:
             res = f"{name}_{conflict_count + 1}"
             conflict_count += 1
-        if conflict_count != 0 and self.__print_warning:
+        if conflict_count != 0 and self._print_warning:
             print("Warning: got output name already exist")
 
         return res
