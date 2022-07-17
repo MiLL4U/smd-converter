@@ -14,7 +14,8 @@ class OperationButtonArray(ttk.Frame):
                                         functions called with buttons
             command_texts (Dict[str, str]): button text for each command
         """
-        super().__init__(master=master, *args, **kwargs)
+        kwargs['master'] = master
+        super().__init__(*args, **kwargs)
         self.__commands = commands
         self.__command_texts = command_texts
 

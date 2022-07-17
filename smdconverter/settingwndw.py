@@ -10,7 +10,8 @@ class SettingsWindow(tk.Toplevel):
     # TODO: implement settings window
     def __init__(self, master: tk.Misc, settings: ApplicationSettings,
                  *args, **kwargs):
-        super().__init__(master=master, *args, **kwargs)
+        kwargs['master'] = master  # TODO: can be refactored?
+        super().__init__(*args, **kwargs)
 
         self.title("Settings")
 
@@ -44,7 +45,8 @@ class SettingsWindow(tk.Toplevel):
 class GeneralSettingsFrame(ttk.LabelFrame):
     def __init__(self, master: tk.Misc,
                  *args, **kwargs) -> None:
-        super().__init__(master=master, text='General Settings',
+        kwargs['master'] = master
+        super().__init__(text='General Settings',
                          *args, **kwargs)
 
         self.__create_widgets()

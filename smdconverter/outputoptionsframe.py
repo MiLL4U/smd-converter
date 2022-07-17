@@ -22,7 +22,8 @@ class OutputOptionsFrame(ttk.LabelFrame):
                  dst_var: tk.StringVar, seek_cmd: Any,
                  settings: ApplicationSettings,
                  *args, **kwargs) -> None:
-        super().__init__(master=master, text="Options", *args, **kwargs)
+        kwargs['master'] = master
+        super().__init__(text="Options", *args, **kwargs)
 
         # variables
         self.current_job: ConvertJob = None
