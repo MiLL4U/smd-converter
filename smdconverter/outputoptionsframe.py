@@ -22,8 +22,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
                  dst_var: tk.StringVar, seek_cmd: Any,
                  settings: ApplicationSettings,
                  *args, **kwargs) -> None:
-        kwargs['master'] = master
-        super().__init__(text="Options", *args, **kwargs)
+        super().__init__(master=master, text="Options", *args, **kwargs)
 
         # variables
         self.current_job: ConvertJob = None
@@ -143,6 +142,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
         detector_id = int(self.selected_detector.get().split(':')[0])
         self.current_job.select_detector(detector_id)
         self.update_spaxis_region()
+        # TODO: update output name when selected detector changed
 
         self.cmd_on_update()
 

@@ -7,8 +7,7 @@ from tkinter.filedialog import askdirectory
 class DestinationSelector(ttk.Frame):
     def __init__(self, master: tk.Misc, dst_var: tk.StringVar,
                  *args, **kwargs):
-        kwargs['master'] = master
-        super().__init__(*args, **kwargs)
+        super().__init__(master=master, *args, **kwargs)
 
         # variables
         self.__dst_dir = dst_var

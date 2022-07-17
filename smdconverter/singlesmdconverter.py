@@ -11,6 +11,8 @@ from typing import Callable, Dict, List, Tuple, Union
 import tkinterdnd2 as tkdnd
 from ibwpy.main import BinaryWaveHeader5
 
+from smdconverter.nameformatter import SpectralDataIBWNameFormatter
+
 from .constants import (GITHUB_URL, PADDING_OPTIONS, SETTINGS_JSON_PATH,
                         VERSION, Direction)
 
@@ -31,7 +33,6 @@ FILE_TYPES = (
     ("SMD spectral data", '*.smd'),
     ("All files", '*.*'))
 DEFAULT_NAME_FMT = "wave{}"
-
 
 # layout options
 SCRLBAR_COLUMN = 1  # column which contains scroll bar in main window
@@ -139,17 +140,19 @@ class App(tkdnd.Tk):
         for file_name in file_names:
             # TODO: append multiple jobs when get smd file
             # with multiple detectors? (togglable with settings window)
-            wave_name, extension = os.path.splitext(
+            smd_name, extension = os.path.splitext(
                 os.path.basename(file_name))
             if extension != '.smd':
                 print(f"Skipped (invalid file extension): {file_name}")
                 continue
 
-            wave_name = self.__format_wave_name(wave_name)
-
-            # load smd file
-            try:
-                convert_job = ConvertJob(os.path.abspath(file_name), wave_name)
+            try:  # load job with temporal name first and then format name
+                convert_job = ConvertJob(
+                    os.path.abspath(file_name), smd_name)
+                name_formatter = SpectralDataIBWNameFormatter(
+                    job=convert_job, settings=self.__settings)
+                convert_job.output_name = name_formatter.get_name(
+                    self.output_names)
             except Exception as error:
                 print(f"Skipped (illegal format): {file_name} ({error})")
                 continue
@@ -172,38 +175,6 @@ class App(tkdnd.Tk):
         # select last job which opened
         last_job = self.jobs[-1]
         self.job_list.select_job(last_job)
-
-    def __format_wave_name(self, wave_name: str) -> str:
-        if not wave_name[0].isalpha():  # 1st character must be an alphabet
-            print("Warning: wave name must start with an alphabet")
-            wave_name = DEFAULT_NAME_FMT.format(wave_name)
-
-        # replace space to underscore and remove invalid characters
-        wave_name = wave_name.replace(" ", "_")
-        valid_characters = [chr_ for chr_ in wave_name
-                            if chr_.encode('utf-8').isalnum()
-                            or chr_ == '_']
-        valid_wave_name = "".join(valid_characters)
-        if valid_wave_name != wave_name:
-            wave_name = valid_wave_name
-            print("Warning: all characters in name must be"
-                  "alphabet, digit, or underscore")
-
-        # TODO: auto formatting wave_name
-        # (corresponds to detector and ApplicationSettings)
-
-        # avoid name confliction
-        exist_names = self.output_names
-        alter_name = wave_name
-        conflict_count = 0
-        while alter_name in exist_names:
-            alter_name = f"{wave_name}_{conflict_count + 1}"
-            if conflict_count == 0:
-                print("Warning: got output name already exist")
-            conflict_count += 1
-        wave_name = alter_name
-
-        return wave_name
 
     @property
     def output_names(self) -> Tuple[str]:

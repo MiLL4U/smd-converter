@@ -1,5 +1,6 @@
 import datetime
 import os
+from typing import Tuple
 from .convertjob import ConvertJob
 from smdconverter.appsettings import ApplicationSettings
 
@@ -14,6 +15,10 @@ class IBWNameFormatter:
         self.__print_warning = print_warning
 
     @property
+    def job(self) -> ConvertJob:
+        return self.__job
+
+    @property
     def settings(self) -> ApplicationSettings:
         return self.__settings
 
@@ -21,7 +26,8 @@ class IBWNameFormatter:
         self.__settings = settings
 
     def format_original_name(self, name_fmt: str) -> str:
-        org_name = os.path.splitext(self.__job.src_path)[0]
+        org_name, _ = os.path.splitext(
+                os.path.basename(self.__job.src_path))
         return name_fmt.replace("%O", org_name)
 
     def format_acq_datetime(self, name_fmt: str) -> str:
@@ -80,6 +86,27 @@ class SpectralAxisIBWNameFormatter(IBWNameFormatter):
 
 
 class SpectralDataIBWNameFormatter(IBWNameFormatter):
-    def __init__(self) -> None:
-        super().__init__()
-    pass
+    def __init__(self, job: ConvertJob, settings: ApplicationSettings,
+                 print_warning: bool = True) -> None:
+        super().__init__(job, settings, print_warning)
+
+    def get_name(self, exist_names: Tuple[str]) -> str:
+        detector_name = self.job.selected_detector_name
+        name_fmt = self.settings.ibw_name_formats[detector_name]
+        res = self.format_name(name_fmt)
+        res = self.validate_name(res)
+        res = self.unique_name(res, exist_names)
+
+        return res
+
+    def unique_name(self, name: str, exist_names: Tuple[str]) -> str:
+        res = name
+
+        conflict_count = 0
+        while res in exist_names:
+            res = f"{name}_{conflict_count + 1}"
+            conflict_count += 1
+        if conflict_count != 0 and self.__print_warning:
+            print("Warning: got output name already exist")
+
+        return res
