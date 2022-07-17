@@ -6,6 +6,9 @@ from typing import Any
 
 from ibwpy import BinaryWaveHeader5
 
+from smdconverter.appsettings import ApplicationSettings
+from smdconverter.nameformatter import SpectralAxisIBWNameFormatter
+
 from .constants import PADDING_OPTIONS, Direction
 from .convertjob import ConvertJob
 from .smdparser import SPECTRAL_UNITS
@@ -17,6 +20,7 @@ DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
 class OutputOptionsFrame(ttk.LabelFrame):
     def __init__(self, master: tk.Misc, cmd_on_update: Any,
                  dst_var: tk.StringVar, seek_cmd: Any,
+                 settings: ApplicationSettings,
                  *args, **kwargs) -> None:
         kwargs['master'] = master
         super().__init__(text="Options", *args, **kwargs)
@@ -28,6 +32,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
         # tk variables
         self.dst_var = dst_var
         self.seek_cmd = seek_cmd
+        self.__settings = settings
         self.selected_detector = tk.StringVar()
         self.output_name = tk.StringVar()
         self.selected_unit = tk.StringVar(value=SPECTRAL_UNITS[0])
@@ -164,8 +169,10 @@ class OutputOptionsFrame(ttk.LabelFrame):
                 arr = self.current_job.spectral_axis_array(unit)
                 self.spaxis_region_text.set(f"{arr[0]:.1f} ~ {arr[-1]:.1f}")
                 self.sp_outname.set(DEFAULT_SPECTRAL_AXIS_NAMES[unit])
-                # TODO: auto formatting sp_outname (include datetime?)
-                # (using ApplicationSettings?)
+
+                name_formatter = SpectralAxisIBWNameFormatter(
+                    job=self.current_job, settings=self.__settings)
+                self.sp_outname.set(name_formatter.get_name(unit))
 
                 self.unit_cb.configure(state='readonly')
                 self.sp_outname_entry.configure(state=tk.NORMAL)

@@ -11,8 +11,9 @@ from typing import Callable, Dict, List, Tuple, Union
 import tkinterdnd2 as tkdnd
 from ibwpy.main import BinaryWaveHeader5
 
-from .appsettings import ApplicationSettings
-from .constants import GITHUB_URL, PADDING_OPTIONS, VERSION, Direction
+from .appsettings import ApplicationSettingsHandler
+from .constants import (GITHUB_URL, PADDING_OPTIONS, SETTINGS_JSON_PATH,
+                        VERSION, Direction)
 from .convertjob import ConvertJob
 from .dstselector import DestinationSelector
 from .joblist import JobList
@@ -71,7 +72,9 @@ class App(tkdnd.Tk):
         # variables
         self.jobs: List[ConvertJob] = []
         self.dst_dir = tk.StringVar(value="")
-        self.__settings = ApplicationSettings()
+        settings_handler = ApplicationSettingsHandler(
+            SETTINGS_JSON_PATH)
+        self.__settings = settings_handler.load()
 
         self.__create_widgets()
         self.update_idletasks()  # required for set minsize dynamically
@@ -113,7 +116,7 @@ class App(tkdnd.Tk):
         # output options
         self.outputopt_frame = OutputOptionsFrame(
             self, self.update_options, dst_var=self.dst_dir,
-            seek_cmd=self.seek_job)
+            seek_cmd=self.seek_job, settings=self.__settings)
         self.outputopt_frame.grid(
             row=3, column=0, columnspan=2,
             sticky=tk.NSEW, **PADDING_OPTIONS)
@@ -153,35 +156,10 @@ class App(tkdnd.Tk):
             if extension != '.smd':
                 print(f"Skipped (invalid file extension): {file_name}")
                 continue
-            if not wave_name[0].isalpha():  # 1st character must be an alphabet
-                print("Warning: wave name must start with an alphabet")
-                wave_name = DEFAULT_NAME_FMT.format(wave_name)
 
-            # replace space to underscore and remove invalid characters
-            wave_name = wave_name.replace(" ", "_")
-            valid_characters = [chr_ for chr_ in wave_name
-                                if chr_.encode('utf-8').isalnum()
-                                or chr_ == '_']
-            valid_wave_name = "".join(valid_characters)
-            if valid_wave_name != wave_name:
-                wave_name = valid_wave_name
-                print("Warning: all characters in name must be"
-                      "alphabet, digit, or underscore")
+            wave_name = self.__format_wave_name(wave_name)
 
-            # TODO: auto formatting wave_name
-            # (corresponds to detector and ApplicationSettings)
-
-            # avoid name confliction
-            exist_names = self.output_names
-            alter_name = wave_name
-            conflict_count = 0
-            while alter_name in exist_names:
-                alter_name = f"{wave_name}_{conflict_count + 1}"
-                if conflict_count == 0:
-                    print("Warning: got output name already exist")
-                conflict_count += 1
-            wave_name = alter_name
-
+            # load smd file
             try:
                 convert_job = ConvertJob(os.path.abspath(file_name), wave_name)
             except Exception as error:
@@ -206,6 +184,38 @@ class App(tkdnd.Tk):
         # select last job which opened
         last_job = self.jobs[-1]
         self.job_list.select_job(last_job)
+
+    def __format_wave_name(self, wave_name: str) -> str:
+        if not wave_name[0].isalpha():  # 1st character must be an alphabet
+            print("Warning: wave name must start with an alphabet")
+            wave_name = DEFAULT_NAME_FMT.format(wave_name)
+
+        # replace space to underscore and remove invalid characters
+        wave_name = wave_name.replace(" ", "_")
+        valid_characters = [chr_ for chr_ in wave_name
+                            if chr_.encode('utf-8').isalnum()
+                            or chr_ == '_']
+        valid_wave_name = "".join(valid_characters)
+        if valid_wave_name != wave_name:
+            wave_name = valid_wave_name
+            print("Warning: all characters in name must be"
+                  "alphabet, digit, or underscore")
+
+        # TODO: auto formatting wave_name
+        # (corresponds to detector and ApplicationSettings)
+
+        # avoid name confliction
+        exist_names = self.output_names
+        alter_name = wave_name
+        conflict_count = 0
+        while alter_name in exist_names:
+            alter_name = f"{wave_name}_{conflict_count + 1}"
+            if conflict_count == 0:
+                print("Warning: got output name already exist")
+            conflict_count += 1
+        wave_name = alter_name
+
+        return wave_name
 
     @property
     def output_names(self) -> Tuple[str]:
