@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.messagebox import showinfo
-from typing import Any, Dict, List
+from typing import Callable, Dict, List
 
 from .convertjob import ConvertJob
 from .notegen import IBWNoteGenerator
@@ -19,13 +19,13 @@ DATETIME_FMT = "%Y/%m/%d %H:%M"
 
 class JobList(ttk.Treeview):
     def __init__(self, master: tk.Misc, jobs: List[ConvertJob],
-                 select_cmd: Any, *args, **kwargs):
+                 select_cmd: Callable, *args, **kwargs):
         """Treeview which displays convert jobs
 
         Args:
             master (tk.Misc): container of this widget
             jobs (List[ConvertJob]): reference to list of jobs
-            select_cmd (Any): command run on select item
+            select_cmd (Callable): command run on select item
         """
         super().__init__(
             master=master, columns=JOBLIST_COLUMNS,

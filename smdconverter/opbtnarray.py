@@ -10,7 +10,7 @@ class OperationButtonArray(ttk.Frame):
 
         Args:
             master (tk.Misc): container of this widget
-            commmands (Dict[str, Any]): names of commands and
+            commmands (Dict[str, Callable]): names of commands and
                                         functions called with buttons
             command_texts (Dict[str, str]): button text for each command
         """

@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.filedialog import asksaveasfilename
 from tkinter.messagebox import showerror
-from typing import Any
+from typing import Callable
 
 from ibwpy import BinaryWaveHeader5
 
@@ -19,8 +19,8 @@ DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
 
 
 class OutputOptionsFrame(ttk.LabelFrame):
-    def __init__(self, master: tk.Misc, cmd_on_update: Any,
-                 dst_var: tk.StringVar, seek_cmd: Any,
+    def __init__(self, master: tk.Misc, cmd_on_update: Callable,
+                 dst_var: tk.StringVar, seek_cmd: Callable,
                  settings: ApplicationSettings,
                  *args, **kwargs) -> None:
         super().__init__(master=master, text="Options", *args, **kwargs)
