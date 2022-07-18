@@ -94,12 +94,13 @@ class SpectralDataIBWNameFormatter(IBWNameFormatter):
                  print_warning: bool = True) -> None:
         super().__init__(job, settings, print_warning)
 
-    def get_name(self, exist_names: Tuple[str]) -> str:
+    def get_name(self, exist_names: Tuple[str] = None) -> str:
         detector_name = self.job.selected_detector_name
         name_fmt = self.settings.ibw_name_formats[detector_name]
         res = self.format_name(name_fmt)
         res = self.validate_name(res)
-        res = self.unique_name(res, exist_names)
+        if exist_names:
+            res = self.unique_name(res, exist_names)
 
         return res
 

@@ -11,7 +11,7 @@ from typing import Callable, Dict, List, Tuple, Union
 import tkinterdnd2 as tkdnd
 from ibwpy.main import BinaryWaveHeader5
 
-from smdconverter.nameformatter import SpectralDataIBWNameFormatter
+from .nameformatter import SpectralDataIBWNameFormatter
 
 from .constants import (GITHUB_URL, PADDING_OPTIONS, SETTINGS_JSON_PATH,
                         VERSION, Direction)

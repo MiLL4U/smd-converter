@@ -7,7 +7,8 @@ from typing import Any
 from ibwpy import BinaryWaveHeader5
 
 from smdconverter.appsettings import ApplicationSettings
-from smdconverter.nameformatter import SpectralAxisIBWNameFormatter
+from smdconverter.nameformatter import (SpectralAxisIBWNameFormatter,
+                                        SpectralDataIBWNameFormatter)
 
 from .constants import PADDING_OPTIONS, Direction
 from .convertjob import ConvertJob
@@ -142,7 +143,9 @@ class OutputOptionsFrame(ttk.LabelFrame):
         detector_id = int(self.selected_detector.get().split(':')[0])
         self.current_job.select_detector(detector_id)
         self.update_spaxis_region()
-        # TODO: update output name when selected detector changed
+        name_formatter = SpectralDataIBWNameFormatter(
+            job=self.current_job, settings=self.__settings)
+        self.current_job.output_name = name_formatter.get_name()
 
         self.cmd_on_update()
 
