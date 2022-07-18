@@ -19,13 +19,14 @@ DATETIME_FMT = "%Y/%m/%d %H:%M"
 
 class JobList(ttk.Treeview):
     def __init__(self, master: tk.Misc, jobs: List[ConvertJob],
-                 select_cmd: Callable, *args, **kwargs):
+                 select_cmd: Callable[[ConvertJob], None], *args, **kwargs):
         """Treeview which displays convert jobs
 
         Args:
             master (tk.Misc): container of this widget
             jobs (List[ConvertJob]): reference to list of jobs
-            select_cmd (Callable): command run on select item
+            select_cmd (Callable[[ConvertJob], None]):
+                command run on select item
         """
         super().__init__(
             master=master, columns=JOBLIST_COLUMNS,

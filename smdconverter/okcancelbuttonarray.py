@@ -6,8 +6,9 @@ from .constants import PADDING_OPTIONS
 
 
 class OKCancelButtonArray(ttk.Frame):
-    def __init__(self, master: tk.Misc, ok_command: Callable,
-                 cancel_command: Callable, *args, **kwargs) -> None:
+    def __init__(self, master: tk.Misc, ok_command: Callable[[None], None],
+                 cancel_command: Callable[[None], None],
+                 *args, **kwargs) -> None:
         super().__init__(master=master, *args, **kwargs)
         self.__ok_cmd = ok_command
         self.__cancel_cmd = cancel_command

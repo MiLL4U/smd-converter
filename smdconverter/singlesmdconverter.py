@@ -78,7 +78,7 @@ class App(tkdnd.Tk):
 
     def __create_widgets(self):
         # main operation buttons
-        op_commands: Dict[str, Callable] = {
+        op_commands: Dict[str, Callable[[None], None]] = {
             'open': self.open_smd, 'remove': self.remove_job,
             'clear': self.clear_jobs, 'convert': self.convert,
             'settings': self.show_settings_window,
@@ -240,7 +240,7 @@ class App(tkdnd.Tk):
         showinfo("Information", message="Conversion completed.")
         print("Information: Conversion completed.")
 
-    def handle_select_job(self, job: ConvertJob):
+    def handle_select_job(self, job: ConvertJob) -> None:
         self.opbutton_arr.enable('remove')
         self.outputopt_frame.update_target_job(job)
 

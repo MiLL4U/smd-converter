@@ -4,7 +4,8 @@ from typing import Callable, Dict
 
 
 class OperationButtonArray(ttk.Frame):
-    def __init__(self, master: tk.Misc, commands: Dict[str, Callable],
+    def __init__(self, master: tk.Misc,
+                 commands: Dict[str, Callable[[None], None]],
                  command_texts: Dict[str, str], *args, **kwargs) -> None:
         """Frame which contain buttons for main operations
 

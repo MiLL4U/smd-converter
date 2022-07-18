@@ -19,8 +19,8 @@ DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
 
 
 class OutputOptionsFrame(ttk.LabelFrame):
-    def __init__(self, master: tk.Misc, cmd_on_update: Callable,
-                 dst_var: tk.StringVar, seek_cmd: Callable,
+    def __init__(self, master: tk.Misc, cmd_on_update: Callable[[None], None],
+                 dst_var: tk.StringVar, seek_cmd: Callable[[None], None],
                  settings: ApplicationSettings,
                  *args, **kwargs) -> None:
         super().__init__(master=master, text="Options", *args, **kwargs)
