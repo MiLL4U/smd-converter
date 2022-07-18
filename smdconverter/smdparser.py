@@ -7,15 +7,15 @@ from typing_extensions import Literal
 import numpy as np
 import xmltodict
 
+SpatialAxisName = Literal['Z', 'Y', 'X']
+SpectralUnit = Literal['nm', 'cm-1', 'GHz']
+
 XML_BORDER = b'</SCANDATA>\x0d\x0a'
-SPATIAL_AXES = ('Z', 'Y', 'X')
+SPATIAL_AXES: Tuple[SpatialAxisName, ...] = ('Z', 'Y', 'X')
 SPECTRAL_UNITS = ('nm', 'cm-1', 'GHz')
 
 DTYPE = np.float32
 LIGHT_C = 2.998e8  # m/s
-
-SpatialAxisName = Literal['Z', 'Y', 'X']
-SpectralUnit = Literal['nm', 'cm-1', 'GHz']
 
 
 class HeaderDict:
@@ -136,7 +136,7 @@ class Stage3DParameters(HeaderDict):
             for axis_name in self.axis_names}
 
     @property
-    def spatial_size(self) -> Tuple[int, int, int]:
+    def spatial_size(self) -> Tuple[int, ...]:
         return tuple(([int(self.data['AxisSize' + axis_name])
                        for axis_name in self.axis_names]))
 
@@ -310,7 +310,7 @@ class SMDParser:
         return self.header.data_calibrations
 
     @property
-    def spatial_size(self) -> Tuple[int, int, int]:
+    def spatial_size(self) -> Tuple[int, ...]:
         return self.header.stage_parameters.spatial_size
 
     @property
@@ -403,7 +403,7 @@ class SimpledSMDParser(SMDParser):
         return tuple(detector.device_name for detector in self.detectors)
 
     @property
-    def full_array_size(self) -> Tuple[int, int, int, int]:
+    def full_array_size(self) -> Tuple[int, ...]:
         """returns full size of spectral data
         (spectral axes of all detectors are concatenated)"""
         return self.spatial_size + (sum(self.detector_sizes),)
@@ -442,7 +442,7 @@ class SimpledSMDParser(SMDParser):
         return self.full_array[:, :, :, start_idx:end_idx]
 
     def detector_array_size(self, detector_id: int
-                            ) -> Tuple[int, int, int, int]:
+                            ) -> Tuple[int, ...]:
         """returns size of spectral data
         from the detector specified with detector_id"""
         return self.spatial_size + (self.detector_sizes[detector_id],)

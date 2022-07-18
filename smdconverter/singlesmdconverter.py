@@ -10,16 +10,15 @@ from typing import Callable, Dict, List, Tuple, Union
 
 import tkinterdnd2 as tkdnd
 from ibwpy.main import BinaryWaveHeader5
-
-from .nameformatter import SpectralDataIBWNameFormatter
-
-from .constants import (GITHUB_URL, PADDING_OPTIONS, SETTINGS_JSON_PATH,
-                        VERSION, Direction)
+from typing_extensions import Literal
 
 from .appsettings import ApplicationSettingsHandler
+from .constants import (GITHUB_URL, PADDING_OPTIONS, SETTINGS_JSON_PATH,
+                        VERSION, Direction)
 from .convertjob import ConvertJob
 from .dstselector import DestinationSelector
 from .joblist import JobList
+from .nameformatter import SpectralDataIBWNameFormatter
 from .opbtnarray import OperationButtonArray
 from .outputoptionsframe import OutputOptionsFrame
 from .settingwndw import SettingsWindow
@@ -78,7 +77,7 @@ class App(tkdnd.Tk):
 
     def __create_widgets(self):
         # main operation buttons
-        op_commands: Dict[str, Callable[[None], None]] = {
+        op_commands: Dict[str, Callable[[], None]] = {
             'open': self.open_smd, 'remove': self.remove_job,
             'clear': self.clear_jobs, 'convert': self.convert,
             'settings': self.show_settings_window,
@@ -121,7 +120,7 @@ class App(tkdnd.Tk):
         if file_names:
             self.__set_jobs(file_names)
 
-    def __ask_filenames(self) -> Union[Tuple[str], None]:
+    def __ask_filenames(self) -> Union[Tuple[str, ...], Literal['']]:
         filenames = askopenfilenames(
             title="Open files", initialdir='./',
             filetypes=FILE_TYPES)
@@ -135,7 +134,7 @@ class App(tkdnd.Tk):
         self.dst_selector.reset()
         print("Information: All jobs are removed.")
 
-    def __set_jobs(self, file_names: Tuple[str]):
+    def __set_jobs(self, file_names: Tuple[str, ...]):
         opened = False
         for file_name in file_names:
             # TODO: append multiple jobs when get smd file
@@ -177,7 +176,7 @@ class App(tkdnd.Tk):
         self.job_list.select_job(last_job)
 
     @property
-    def output_names(self) -> Tuple[str]:
+    def output_names(self) -> Tuple[str, ...]:
         return tuple(job.output_name for job in self.jobs)
 
     def remove_job(self):
@@ -279,10 +278,12 @@ class App(tkdnd.Tk):
     def dropped(self, event: tkdnd.TkinterDnD.DnDEvent):
         """add job by drug and drop
         """
-        paths_str = event.data
-        paths_with_space = [path.lstrip("{").rstrip("}")
-                            for path in re.findall(r'\{.+?\}', paths_str)]
+        paths_str: str = event.data
+        paths_with_space: List[str] = [
+            path.lstrip("{").rstrip("}")
+            for path in re.findall(
+                r'\{.+?\}', paths_str)]
         space_removed = re.sub(r'\{.+?\}', '', paths_str)
         paths_without_space = space_removed.split()
         paths = paths_with_space + paths_without_space
-        self.__set_jobs(paths)
+        self.__set_jobs(tuple(paths))

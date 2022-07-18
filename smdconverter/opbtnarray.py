@@ -5,17 +5,18 @@ from typing import Callable, Dict
 
 class OperationButtonArray(ttk.Frame):
     def __init__(self, master: tk.Misc,
-                 commands: Dict[str, Callable[[None], None]],
+                 commands: Dict[str, Callable[[], None]],
                  command_texts: Dict[str, str], *args, **kwargs) -> None:
         """Frame which contain buttons for main operations
 
         Args:
             master (tk.Misc): container of this widget
-            commmands (Dict[str, Callable]): names of commands and
+            commmands (Dict[str, Callable[[], None]): names of commands and
                                         functions called with buttons
             command_texts (Dict[str, str]): button text for each command
         """
-        super().__init__(master=master, *args, **kwargs)
+        kwargs['master'] = master
+        super().__init__(*args, **kwargs)
         self.__commands = commands
         self.__command_texts = command_texts
 

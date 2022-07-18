@@ -28,10 +28,9 @@ class JobList(ttk.Treeview):
             select_cmd (Callable[[ConvertJob], None]):
                 command run on select item
         """
-        super().__init__(
-            master=master, columns=JOBLIST_COLUMNS,
-            selectmode=tk.BROWSE,
-            show='headings', *args, **kwargs)
+        kwargs['master'] = master
+        super().__init__(columns=JOBLIST_COLUMNS, selectmode=tk.BROWSE,
+                         show='headings', *args, **kwargs)
         self.bind('<<TreeviewSelect>>', self.handle_item_select)
         self.bind('<Double-Button-1>', self.handle_doubleclick)
 

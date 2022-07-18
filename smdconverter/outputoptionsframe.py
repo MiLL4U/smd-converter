@@ -2,7 +2,7 @@ import tkinter as tk
 from tkinter import ttk
 from tkinter.filedialog import asksaveasfilename
 from tkinter.messagebox import showerror
-from typing import Callable
+from typing import Callable, Union, cast
 
 from ibwpy import BinaryWaveHeader5
 
@@ -12,21 +12,22 @@ from smdconverter.nameformatter import (SpectralAxisIBWNameFormatter,
 
 from .constants import PADDING_OPTIONS, Direction
 from .convertjob import ConvertJob
-from .smdparser import SPECTRAL_UNITS
+from .smdparser import SPECTRAL_UNITS, SpectralUnit
 
 DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
                                'GHz': "BrillouinShift"}
 
 
 class OutputOptionsFrame(ttk.LabelFrame):
-    def __init__(self, master: tk.Misc, cmd_on_update: Callable[[None], None],
-                 dst_var: tk.StringVar, seek_cmd: Callable[[None], None],
+    def __init__(self, master: tk.Misc, cmd_on_update: Callable[[], None],
+                 dst_var: tk.StringVar, seek_cmd: Callable[[Direction], None],
                  settings: ApplicationSettings,
                  *args, **kwargs) -> None:
-        super().__init__(master=master, text="Options", *args, **kwargs)
+        kwargs['master'] = master
+        super().__init__(text="Options", *args, **kwargs)
 
         # variables
-        self.current_job: ConvertJob = None
+        self.current_job: Union[ConvertJob, None] = None
         self.cmd_on_update = cmd_on_update
 
         # tk variables
@@ -141,19 +142,21 @@ class OutputOptionsFrame(ttk.LabelFrame):
 
     def handle_detector_select(self, event) -> None:
         detector_id = int(self.selected_detector.get().split(':')[0])
-        self.current_job.select_detector(detector_id)
-        self.update_spaxis_region()
-        name_formatter = SpectralDataIBWNameFormatter(
-            job=self.current_job, settings=self.__settings)
-        self.current_job.output_name = name_formatter.get_name()
+        if isinstance(self.current_job, ConvertJob):
+            self.current_job.select_detector(detector_id)
+            self.update_spaxis_region()
+            name_formatter = SpectralDataIBWNameFormatter(
+                job=self.current_job, settings=self.__settings)
+            self.current_job.output_name = name_formatter.get_name()
 
-        self.cmd_on_update()
+            self.cmd_on_update()
 
     def handle_outname_enter(self, event: tk.Event) -> None:
         if event.keysym == 'Up' or event.keysym == 'Down':
             return
-        self.current_job.output_name = self.output_name.get()
-        self.cmd_on_update()
+        if isinstance(self.current_job, ConvertJob):
+            self.current_job.output_name = self.output_name.get()
+            self.cmd_on_update()
 
     def handle_outname_arrow(self, direction: Direction):
         self.seek_cmd(direction)
@@ -161,6 +164,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
     def update_spaxis_region(self) -> None:
         if self.current_job:
             unit = self.selected_unit.get()
+            unit = cast(SpectralUnit, unit)
             if self.current_job.shape[3] == 1:
                 # if detector doesn't have spectral axis
                 self.spaxis_region_text.set("<<no axis data>>")

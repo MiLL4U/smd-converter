@@ -10,7 +10,8 @@ class SettingsWindow(tk.Toplevel):
     # TODO: implement settings window
     def __init__(self, master: tk.Misc, settings: ApplicationSettings,
                  *args, **kwargs):
-        super().__init__(master=master, *args, **kwargs)
+        kwargs['master'] = master
+        super().__init__(*args, **kwargs)
 
         self.title("Settings")
 
@@ -18,7 +19,7 @@ class SettingsWindow(tk.Toplevel):
 
         self.__create_widgets()
         self.grab_set()  # make this window modal
-        self.transient(self.master)  # Disable this window on the taskbar
+        self.transient()  # Disable this window on the taskbar
         self.resizable(False, False)
 
         # variables
@@ -44,12 +45,12 @@ class SettingsWindow(tk.Toplevel):
 class GeneralSettingsFrame(ttk.LabelFrame):
     def __init__(self, master: tk.Misc,
                  *args, **kwargs) -> None:
-        super().__init__(
-            master=master, text="General Settings", *args, **kwargs)
+        kwargs['master'] = master
+        super().__init__(text="General Settings", *args, **kwargs)
 
         self.__create_widgets()
 
     def __create_widgets(self) -> None:
         self.multijob_chkbox = ttk.Checkbutton(
             self, text='Add multiple jobs when multiple detectors are found')
-        self.multijob_chkbox.grid(row=0, column=0, **PADDING_OPTIONS)
+        self.multijob_chkbox.grid(row=0, column=0)

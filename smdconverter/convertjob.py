@@ -73,7 +73,7 @@ class ConvertJob:
         return self.__src_path
 
     @property
-    def detector_ids(self) -> Tuple[int]:
+    def detector_ids(self) -> Tuple[int, ...]:
         """returns tuple of available detector indices
 
         Returns:
@@ -82,7 +82,7 @@ class ConvertJob:
         return tuple(range(self.__smd_data.detector_count))
 
     @property
-    def detector_names(self) -> Tuple[str]:
+    def detector_names(self) -> Tuple[str, ...]:
         """returns names of detectors contained in smd data
 
         Returns:
@@ -91,7 +91,7 @@ class ConvertJob:
         return self.__smd_data.detector_names
 
     @property
-    def detector_names_with_id(self) -> Tuple[str]:
+    def detector_names_with_id(self) -> Tuple[str, ...]:
         """returns names of detector and its index as string
         (for displaying information)
 
@@ -122,7 +122,7 @@ class ConvertJob:
         return f"{self.selected_detector}: {self.selected_detector_name}"
 
     @property
-    def shape(self) -> Tuple[int]:
+    def shape(self) -> Tuple[int, ...]:
         return self.__smd_data.detector_array_size(self.selected_detector)
 
     @property

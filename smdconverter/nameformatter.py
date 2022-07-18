@@ -27,7 +27,7 @@ class IBWNameFormatter:
         return self.__print_warning
 
     def updatesettings(self, settings: ApplicationSettings):
-        self.settings = settings
+        self.__settings = settings
 
     def format_original_name(self, name_fmt: str) -> str:
         org_name, _ = os.path.splitext(
@@ -94,7 +94,7 @@ class SpectralDataIBWNameFormatter(IBWNameFormatter):
                  print_warning: bool = True) -> None:
         super().__init__(job, settings, print_warning)
 
-    def get_name(self, exist_names: Tuple[str] = None) -> str:
+    def get_name(self, exist_names: Tuple[str, ...] = None) -> str:
         detector_name = self.job.selected_detector_name
         name_fmt = self.settings.ibw_name_formats[detector_name]
         res = self.format_name(name_fmt)
@@ -104,7 +104,7 @@ class SpectralDataIBWNameFormatter(IBWNameFormatter):
 
         return res
 
-    def unique_name(self, name: str, exist_names: Tuple[str]) -> str:
+    def unique_name(self, name: str, exist_names: Tuple[str, ...]) -> str:
         res = name
 
         conflict_count = 0
