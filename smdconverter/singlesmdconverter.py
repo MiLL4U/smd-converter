@@ -1,4 +1,5 @@
 from __future__ import annotations
+from copy import deepcopy
 
 import os
 import re
@@ -43,7 +44,7 @@ OPERATION_BUTTON_TEXTS = {'open': "Open...", 'remove': "Remove",
 
 
 class App(tkdnd.Tk):
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
         self.title(f"{ROOT_TITLE} {VERSION}")
@@ -75,7 +76,7 @@ class App(tkdnd.Tk):
         print(LAUNCH_MSG)
         print("Please open smd files.")
 
-    def __create_widgets(self):
+    def __create_widgets(self) -> None:
         # main operation buttons
         op_commands: Dict[str, Callable[[], None]] = {
             'open': self.open_smd, 'remove': self.remove_job,
@@ -115,10 +116,10 @@ class App(tkdnd.Tk):
             row=4, column=0, columnspan=2,
             sticky=tk.NSEW, **PADDING_OPTIONS)
 
-    def open_smd(self):
-        file_names = self.__ask_filenames()
-        if file_names:
-            self.__set_jobs(file_names)
+    def open_smd(self) -> None:
+        smd_paths = self.__ask_filenames()
+        if smd_paths:
+            self.__set_jobs(smd_paths)
 
     def __ask_filenames(self) -> Union[Tuple[str, ...], Literal['']]:
         filenames = askopenfilenames(
@@ -126,7 +127,7 @@ class App(tkdnd.Tk):
             filetypes=FILE_TYPES)
         return filenames
 
-    def clear_jobs(self):
+    def clear_jobs(self) -> None:
         self.disable_opbuttons()
         self.jobs.clear()
         self.job_list.reset_contents()
@@ -134,52 +135,73 @@ class App(tkdnd.Tk):
         self.dst_selector.reset()
         print("Information: All jobs are removed.")
 
-    def __set_jobs(self, file_names: Tuple[str, ...]):
+    def __set_jobs(self, smd_paths: Tuple[str, ...]) -> None:
         opened = False
-        for file_name in file_names:
-            # TODO: append multiple jobs when get smd file
-            # with multiple detectors? (togglable with settings window)
+        for smd_path in smd_paths:
             smd_name, extension = os.path.splitext(
-                os.path.basename(file_name))
+                os.path.basename(smd_path))
             if extension != '.smd':
-                print(f"Skipped (invalid file extension): {file_name}")
+                print(f"Skipped (invalid file extension): {smd_path}")
                 continue
 
-            try:  # load job with temporal name first and then format name
+            smd_path = os.path.abspath(smd_path)
+            try:  # load job with temporal name
                 convert_job = ConvertJob(
-                    os.path.abspath(file_name), smd_name)
-                name_formatter = SpectralDataIBWNameFormatter(
-                    job=convert_job, settings=self.__settings)
-                convert_job.output_name = name_formatter.get_name(
-                    self.output_names)
+                    os.path.abspath(smd_path), smd_name)
             except Exception as error:
-                print(f"Skipped (illegal format): {file_name} ({error})")
+                print(f"Skipped (illegal format): {smd_path} ({error})")
                 continue
 
+            convert_job = self.__format_output_name(convert_job)
             self.jobs.append(convert_job)
-            print("Opened:", convert_job.src_path)
+            print(f"Opened: {convert_job.output_name} "
+                  f"from {convert_job.src_path}")
             opened = True
+
+            # add multiple jobs when multiple detectors are found
+            if self.__settings.multi_detector_flag:
+                self.__add_other_detectors(convert_job)
 
         if not opened:  # if valid file is not loaded
             return
+        else:
+            self.__update_widgets_on_open(smd_paths)
 
-        # update widgets
+    def __update_widgets_on_open(self, smd_paths: Tuple[str, ...]) -> None:
         self.job_list.update_contents()
         self.opbutton_arr.enable('convert')
         self.opbutton_arr.enable('clear')
         if not self.dst_dir.get():
             self.dst_dir.set(
-                os.path.abspath(os.path.dirname(file_names[-1])) + "/")
+                os.path.abspath(os.path.dirname(smd_paths[-1])) + "/")
 
         # select last job which opened
         last_job = self.jobs[-1]
         self.job_list.select_job(last_job)
 
+    def __format_output_name(self, job: ConvertJob) -> ConvertJob:
+        formatter = SpectralDataIBWNameFormatter(
+            job=job, settings=self.__settings)
+        job.output_name = formatter.get_name(
+            exist_names=self.output_names)
+
+        return job
+
+    def __add_other_detectors(self, convert_job: ConvertJob) -> None:
+        detector_ids = convert_job.detector_ids
+        for detector_id in detector_ids[1:]:
+            additive_job = deepcopy(convert_job)
+            additive_job.select_detector(detector_id)
+            self.__format_output_name(additive_job)
+            self.jobs.append(additive_job)
+            print(f"Opened: {convert_job.output_name} "
+                  f"from {convert_job.src_path}")
+
     @property
     def output_names(self) -> Tuple[str, ...]:
         return tuple(job.output_name for job in self.jobs)
 
-    def remove_job(self):
+    def remove_job(self) -> None:
         selected_job = self.job_list.selected_job
         selected_job_idx = self.jobs.index(selected_job)
         last_job_idx = len(self.jobs) - 1
@@ -200,7 +222,7 @@ class App(tkdnd.Tk):
             self.handle_select_job(self.job_list.selected_job)
         pass
 
-    def convert(self):
+    def convert(self) -> None:
         # validate all output names
         for name in self.output_names:
             try:
@@ -256,7 +278,7 @@ class App(tkdnd.Tk):
             seeked_idx = 0 if seeked_idx == last_job_idx + 1 else seeked_idx
         self.job_list.select_job(self.jobs[seeked_idx])
 
-    def update_options(self):
+    def update_options(self) -> None:
         # backup selection of JobList (because id changes)
         selected_job = self.job_list.selected_job
 
@@ -267,6 +289,7 @@ class App(tkdnd.Tk):
 
     def show_settings_window(self) -> None:
         self.setting_window = SettingsWindow(self, self.__settings)
+        self.setting_window.focus()
 
     def disable_opbuttons(self) -> None:
         """disable operation buttons which are available only when job(s) exist
@@ -275,7 +298,7 @@ class App(tkdnd.Tk):
         self.opbutton_arr.disable('clear')
         self.opbutton_arr.disable('convert')
 
-    def dropped(self, event: tkdnd.TkinterDnD.DnDEvent):
+    def dropped(self, event: tkdnd.TkinterDnD.DnDEvent) -> None:
         """add job by drug and drop
         """
         paths_str: str = event.data
