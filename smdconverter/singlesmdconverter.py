@@ -194,8 +194,8 @@ class App(tkdnd.Tk):
             additive_job.select_detector(detector_id)
             self.__format_output_name(additive_job)
             self.jobs.append(additive_job)
-            print(f"Opened: {convert_job.output_name} "
-                  f"from {convert_job.src_path}")
+            print(f"Opened: {additive_job.output_name} "
+                  f"from {additive_job.src_path}")
 
     @property
     def output_names(self) -> Tuple[str, ...]:
