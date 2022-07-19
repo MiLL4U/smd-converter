@@ -1,9 +1,10 @@
+from __future__ import annotations
+
 import json
 from os.path import isfile
 from typing import Any, Dict
 
 from .constants import SETTINGS_JSON_PATH
-
 from .defaultsettings import DEFAULT_SETTINGS
 
 JSON_INDENT = 4
@@ -15,14 +16,18 @@ class ApplicationSettings:
         self.__json_path = json_path
 
     @property
+    def settings_dict(self) -> Dict[str, Any]:
+        return self.__settings_dict
+
+    @property
     def general(self) -> Dict[str, Any]:
         return self.__settings_dict['general']
 
     @property
-    def multi_detector_flag(self) -> bool:
+    def multi_jobs_flag(self) -> bool:
         return self.general['loadMultipleDetectors']
 
-    def set_multi_detector_flag(self, flag: bool) -> None:
+    def set_multi_jobs_flag(self, flag: bool) -> None:
         self.__settings_dict['general']['loadMultipleDetectors'] = flag
 
     @property
@@ -45,6 +50,9 @@ class ApplicationSettings:
 
     def set_spectral_axis_name_format(self, unit: str, format_: str) -> None:
         self.__settings_dict['spectralAxisNameFormats'][unit] = format_
+
+    def overwrite_settings(self, new_settings: ApplicationSettings) -> None:
+        self.__settings_dict = new_settings.settings_dict
 
     def save(self) -> None:
         with open(self.__json_path, mode='w') as f:

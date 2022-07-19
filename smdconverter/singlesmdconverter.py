@@ -159,7 +159,7 @@ class App(tkdnd.Tk):
             opened = True
 
             # add multiple jobs when multiple detectors are found
-            if self.__settings.multi_detector_flag:
+            if self.__settings.multi_jobs_flag:
                 self.__add_other_detectors(convert_job)
 
         if not opened:  # if valid file is not loaded
