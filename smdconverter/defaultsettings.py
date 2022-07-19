@@ -1,6 +1,7 @@
 DEFAULT_SETTINGS = {
     "general": {
-        "loadMultipleDetectors": False
+        "loadMultipleDetectors": False,
+        "clearJobsOnComplete": False
     },
     "ibwNameFormats": {
         "HyperFine": "%O_br",

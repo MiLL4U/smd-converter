@@ -26,6 +26,13 @@ class ApplicationSettings:
         self.__settings_dict['general']['loadMultipleDetectors'] = flag
 
     @property
+    def clear_jobs_flag(self) -> bool:
+        return self.general['clearJobsOnComplete']
+
+    def set_clear_jobs_flag(self, flag: bool) -> None:
+        self.__settings_dict['general']['clearJobsOnComplete'] = flag
+
+    @property
     def ibw_name_formats(self) -> Dict[str, str]:
         return self.__settings_dict['ibwNameFormats']
 

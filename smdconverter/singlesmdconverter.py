@@ -188,6 +188,7 @@ class App(tkdnd.Tk):
         return job
 
     def __add_other_detectors(self, convert_job: ConvertJob) -> None:
+        # HACK: Depending on jobs already loaded is ineffective?
         detector_ids = convert_job.detector_ids
         for detector_id in detector_ids[1:]:
             additive_job = deepcopy(convert_job)
@@ -260,6 +261,10 @@ class App(tkdnd.Tk):
             job.convert(path=self.dst_dir.get())
         showinfo("Information", message="Conversion completed.")
         print("Information: Conversion completed.")
+
+        # clear jobs if enabled in the settings
+        if self.__settings.clear_jobs_flag:
+            self.clear_jobs()
 
     def handle_select_job(self, job: ConvertJob) -> None:
         self.opbutton_arr.enable('remove')
