@@ -25,7 +25,7 @@ class HeaderDict:
         self.__data = data_dict
 
     @property
-    def data(self):
+    def data(self) -> OrderedDict:
         return self.__data
 
 
@@ -57,7 +57,7 @@ class SMDHeader(HeaderDict):
                 frame_params['DataCalibration'])]
 
     @property
-    def buffer(self):
+    def buffer(self) -> bytes:
         return self.__buffer
 
 
@@ -71,7 +71,7 @@ class FrameHeader(HeaderDict):
 
         self.__creation_datetime = self.__parse_creation_datetime()
 
-    def __parse_creation_datetime(self):
+    def __parse_creation_datetime(self) -> datetime.datetime:
         date_str = self.data['Date']
         time_str = self.data['Time']
 
@@ -163,7 +163,7 @@ class StageAxisInfo(HeaderDict):
         super().__init__(data_dict)
 
     @property
-    def unit(self):
+    def unit(self) -> str:
         """returns unit of this spatial axis"""
         return self.data['AxisUnitName']
 
@@ -371,7 +371,7 @@ class SimpledSMDParser(SMDParser):
             for data_calibration in self.header.data_calibrations]
         self.__full_array = self.unpack_full_array()
 
-    def validate(self):
+    def validate(self) -> None:
         """check if data has only one channel and series"""
         for data_calibration in self.data_calibrations:
             if data_calibration.channels_num != 1:

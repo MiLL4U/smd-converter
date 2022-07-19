@@ -43,11 +43,11 @@ class OutputOptionsFrame(ttk.LabelFrame):
         self.__create_widgets()
         self.disable_widgets()
 
-    def __create_widgets(self):
+    def __create_widgets(self) -> None:
         self.__create_row0()
         self.__create_row1()
 
-    def __create_row0(self):
+    def __create_row0(self) -> None:
         row = 0
         # Combobox to select detector
         detector_label = ttk.Label(self, text="Detector:")
@@ -79,7 +79,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
         self.outname_entry.grid(
             row=row, column=4, sticky=tk.E, **PADDING_OPTIONS)
 
-    def __create_row1(self):
+    def __create_row1(self) -> None:
         row = 1
         # label to display max and min of spectral axis
         spaxis_label = ttk.Label(self, text="Spectral axis:")
@@ -124,7 +124,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
         self.sp_outname_entry.configure(state=tk.DISABLED)
         self.sp_save_btn.configure(state=tk.DISABLED)
 
-    def update_target_job(self, job: ConvertJob):
+    def update_target_job(self, job: ConvertJob) -> None:
         """get information from ConvertJob and enable widgets
         """
         # detector
@@ -158,7 +158,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
             self.current_job.output_name = self.output_name.get()
             self.cmd_on_update()
 
-    def handle_outname_arrow(self, direction: Direction):
+    def handle_outname_arrow(self, direction: Direction) -> None:
         self.seek_cmd(direction)
 
     def update_spaxis_region(self) -> None:
@@ -185,10 +185,10 @@ class OutputOptionsFrame(ttk.LabelFrame):
                 self.sp_outname_entry.configure(state=tk.NORMAL)
                 self.sp_save_btn.configure(state=tk.NORMAL)
 
-    def handle_unit_select(self, *args):
+    def handle_unit_select(self, *args) -> None:
         self.update_spaxis_region()
 
-    def handle_spsave_btn(self):
+    def handle_spsave_btn(self) -> None:
         try:
             BinaryWaveHeader5.is_valid_name(self.sp_outname.get())
         except ValueError as error:
@@ -200,8 +200,9 @@ class OutputOptionsFrame(ttk.LabelFrame):
             filetypes=(("Igor Binary Wave", '*.ibw'),
                        ("All files", '*.*')),
             initialfile=f"{self.sp_outname.get()}.ibw")
-        if dst_path:
+        if dst_path and isinstance(self.current_job, ConvertJob):
+            unit = cast(SpectralUnit, self.selected_unit.get())
             ibw = self.current_job.spectra_axis_ibw(
-                unit=self.selected_unit.get(), name=self.sp_outname.get())
+                unit=unit, name=self.sp_outname.get())
             ibw.save(dst_path)
             print(f"Saved: {dst_path}")

@@ -1,7 +1,8 @@
+from typing import List
 import setuptools
 
 
-def _requires_from_file(filename):
+def _requires_from_file(filename: str) -> List[str]:
     return open(filename).read().splitlines()
 
 

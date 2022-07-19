@@ -25,7 +25,7 @@ class SettingsWindow(tk.Toplevel):
         # variables
         self.__settings = settings
 
-    def __create_widgets(self):
+    def __create_widgets(self) -> None:
         self.general_frame = GeneralSettingsFrame(self)
         self.general_frame.grid(
             row=0, column=0, sticky=tk.NSEW, **PADDING_OPTIONS)
@@ -35,10 +35,10 @@ class SettingsWindow(tk.Toplevel):
         self.okcancel_btns.grid(
             row=2, column=0, sticky=tk.EW, **PADDING_OPTIONS)
 
-    def __handle_ok_btn(self):
+    def __handle_ok_btn(self) -> None:
         print("ok")
 
-    def __handle_cancel_btn(self):
+    def __handle_cancel_btn(self) -> None:
         self.destroy()
 
 
@@ -53,4 +53,4 @@ class GeneralSettingsFrame(ttk.LabelFrame):
     def __create_widgets(self) -> None:
         self.multijob_chkbox = ttk.Checkbutton(
             self, text='Add multiple jobs when multiple detectors are found')
-        self.multijob_chkbox.grid(row=0, column=0)
+        self.multijob_chkbox.grid(row=0, column=0, **PADDING_OPTIONS)

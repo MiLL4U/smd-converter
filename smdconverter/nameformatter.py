@@ -26,7 +26,7 @@ class IBWNameFormatter:
     def print_warning(self) -> bool:
         return self.__print_warning
 
-    def updatesettings(self, settings: ApplicationSettings):
+    def updatesettings(self, settings: ApplicationSettings) -> None:
         self.__settings = settings
 
     def format_original_name(self, name_fmt: str) -> str:

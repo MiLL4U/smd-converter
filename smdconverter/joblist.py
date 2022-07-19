@@ -42,7 +42,7 @@ class JobList(ttk.Treeview):
         self.__layout_columns()
         self.update_contents()
 
-    def __layout_columns(self):
+    def __layout_columns(self) -> None:
         for column in JOBLIST_COLUMNS:
             self.heading(column, text=JOBLIST_COLUMN_TEXTS[column])
             self.column(
@@ -50,7 +50,7 @@ class JobList(ttk.Treeview):
         self.column(   # let one column stretchable
             JOBLIST_STRETCHABLE_COLUMN, stretch=True)
 
-    def update_contents(self):
+    def update_contents(self) -> None:
         """update display"""
         self.reset_contents()
 
@@ -63,7 +63,7 @@ class JobList(ttk.Treeview):
             id_ = self.insert('', tk.END, values=row)
             self.jobs_dict[id_] = job
 
-    def reset_contents(self):
+    def reset_contents(self) -> None:
         self.delete(*self.get_children())
 
     @property

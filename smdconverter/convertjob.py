@@ -137,7 +137,7 @@ class ConvertJob:
             name=name, detector_id=self.selected_detector, unit=unit)
         return ibw
 
-    def convert(self, path: str):
+    def convert(self, path: str) -> None:
         ibw = self.converter.make_body(
             name=self.output_name, detector_id=self.selected_detector)
         save_path = f"{path}{self.output_name}.ibw"

@@ -22,7 +22,7 @@ class OperationButtonArray(ttk.Frame):
 
         self.__create_buttons()
 
-    def __create_buttons(self):
+    def __create_buttons(self) -> None:
         """create button for each command"""
         self.__buttons: Dict[str, ttk.Button] = {}
         for i, cmd_name in enumerate(self.__commands.keys()):

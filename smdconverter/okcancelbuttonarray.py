@@ -16,7 +16,7 @@ class OKCancelButtonArray(ttk.Frame):
 
         self.__create_widgets()
 
-    def __create_widgets(self):
+    def __create_widgets(self) -> None:
         self.cancel_btn = ttk.Button(
             self, text="Cancel", command=self.__cancel_cmd)
         self.cancel_btn.pack(side=tk.RIGHT, **PADDING_OPTIONS)
