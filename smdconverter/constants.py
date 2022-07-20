@@ -2,7 +2,7 @@ from typing import Any, Dict
 
 from typing_extensions import Literal
 
-VERSION = "1.1.1"
+VERSION = "1.2.0"
 GITHUB_URL = "https://github.com/MiLL4U/smd-converter/releases"
 
 # literals
