@@ -1,10 +1,11 @@
 from typing import Tuple
-from .smdparser import SpatialAxisName, SpectralUnit
-from .smdparser import SimpledSMDParser
-from .notegen import IBWNoteGenerator
+
 import ibwpy as ip
-from ibwpy.main import BinaryWave5
 import numpy as np
+from ibwpy.main import BinaryWave5
+
+from .notegen import IBWNoteGenerator
+from .smdparser import SimpledSMDParser, SpatialAxisName, SpectralUnit
 
 IBW_SPATIAL_AXIS: Tuple[SpatialAxisName, ...] = ('X', 'Y', 'Z')
 

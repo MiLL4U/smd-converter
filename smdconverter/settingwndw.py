@@ -4,7 +4,8 @@ from tkinter import ttk
 from typing import Dict, cast
 
 from .appsettings import ApplicationSettings
-from .constants import (PADDING_OPTIONS, SPECTRAL_AXIS_FORMAT_COLUMN_TEXTS,
+from .constants import (FORMAT_DESCRIPTION, PADDING_OPTIONS,
+                        SPECTRAL_AXIS_FORMAT_COLUMN_TEXTS,
                         SPECTRAL_AXIS_FORMAT_COLUMNS,
                         SPECTRAL_DATA_FORMAT_COLUMN_TEXTS,
                         SPECTRAL_DATA_FORMAT_COLUMNS)
@@ -31,7 +32,8 @@ class SettingsWindow(tk.Toplevel):
         self.rowconfigure(0, weight=1)  # general settings
         self.rowconfigure(1, weight=1)  # name format for spectral data
         self.rowconfigure(2, weight=1)  # name format for spectral axis
-        self.rowconfigure(3, weight=0)  # ok and cancel buttons
+        self.rowconfigure(3, weight=1)
+        self.rowconfigure(4, weight=0)  # ok and cancel buttons
 
         # variables
         # **settings are updated only when __handle_cancel_btn() is called**
@@ -67,11 +69,17 @@ class SettingsWindow(tk.Toplevel):
         self.axis_fmt_frame.grid(
             column=0, row=2, sticky=tk.EW, **PADDING_OPTIONS)
 
+        self.fmt_description_label = ttk.Label(
+            master=self, font=('Arial', 8),
+            text=FORMAT_DESCRIPTION)
+        self.fmt_description_label.grid(
+            column=0, row=3, sticky=tk.NSEW, padx=5)
+
         self.okcancel_btns = OKCancelButtonArray(
             master=self, ok_command=self.__handle_ok_btn,
             cancel_command=self.__handle_cancel_btn)
         self.okcancel_btns.grid(
-            column=0, row=3, sticky=tk.EW)
+            column=0, row=4, sticky=tk.EW)
 
     def __handle_ok_btn(self) -> None:
         self.__current_settings.overwrite_settings(self.__new_settings)

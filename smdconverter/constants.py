@@ -1,4 +1,5 @@
 from typing import Any, Dict
+
 from typing_extensions import Literal
 
 VERSION = "1.1.1"
@@ -20,3 +21,11 @@ SPECTRAL_DATA_FORMAT_COLUMN_TEXTS = {
 SPECTRAL_AXIS_FORMAT_COLUMNS = ('unit', 'name_fmt')
 SPECTRAL_AXIS_FORMAT_COLUMN_TEXTS = {
     'unit': "Unit", 'name_fmt': "Name format"}
+
+# texts
+FORMAT_DESCRIPTION = """Format specifiers
+  [General]
+    %O: original name of SMD file
+  [Acquisition date]
+    %Y: year (4 digits), %y: year (2 digits), %m: month, %d: day,
+    %H: hour, %M: minute, %S: second"""

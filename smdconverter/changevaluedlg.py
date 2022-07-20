@@ -1,10 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
 from typing import Callable, Tuple, Union
+
 from .constants import PADDING_OPTIONS
-
 from .okcancelbuttonarray import OKCancelButtonArray
-
 
 DEFAULT_LENGTH = 30
 DEFAULT_TITLE = "Edit value"

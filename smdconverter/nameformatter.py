@@ -1,8 +1,9 @@
 import datetime
 import os
 from typing import Tuple
-from .convertjob import ConvertJob
+
 from .appsettings import ApplicationSettings
+from .convertjob import ConvertJob
 
 DEFAULT_NAME_FMT = "wave{}"
 

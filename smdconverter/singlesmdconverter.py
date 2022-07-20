@@ -1,9 +1,9 @@
 from __future__ import annotations
-from copy import deepcopy
 
 import os
 import re
 import tkinter as tk
+from copy import deepcopy
 from tkinter import ttk
 from tkinter.filedialog import askopenfilenames
 from tkinter.messagebox import askyesno, showerror, showinfo
@@ -294,7 +294,6 @@ class App(tkdnd.Tk):
 
     def show_settings_window(self) -> None:
         self.setting_window = SettingsWindow(self, self.__settings)
-        self.setting_window.focus()
 
     def disable_opbuttons(self) -> None:
         """disable operation buttons which are available only when job(s) exist

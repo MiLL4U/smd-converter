@@ -1,11 +1,11 @@
 from __future__ import annotations
-import datetime
 
+import datetime
 from typing import Dict, List, OrderedDict, Tuple
-from typing_extensions import Literal
 
 import numpy as np
 import xmltodict
+from typing_extensions import Literal
 
 SpatialAxisName = Literal['Z', 'Y', 'X']
 SpectralUnit = Literal['nm', 'cm-1', 'GHz']

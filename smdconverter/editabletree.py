@@ -1,10 +1,10 @@
-from abc import ABCMeta, abstractmethod
 import tkinter as tk
+from abc import ABCMeta, abstractmethod
 from tkinter import ttk
 from typing import Callable, Dict, Tuple, Union, cast
 
-from .constants import PADDING_OPTIONS
 from .changevaluedlg import DEFAULT_LENGTH, DEFAULT_TITLE, ChangeValueDialog
+from .constants import PADDING_OPTIONS
 
 BUTTON_WIDTH = 6
 
@@ -99,15 +99,15 @@ class ChangeableTreeFrame(ttk.LabelFrame):
                 title=self.dialog_title, entry_length=self.entry_length,
                 empty_ok=self.empty_ok)
             dialog_input = dialog.show()
-            if dialog_input is None:
-                return
-            if dialog_input[0] == selected_key:
-                self.values_dict[selected_key] = dialog_input[1]
-            else:
-                del self.values_dict[selected_key]
-                self.values_dict[dialog_input[0]] = dialog_input[1]
+            if dialog_input:
+                if dialog_input[0] == selected_key:
+                    self.values_dict[selected_key] = dialog_input[1]
+                else:
+                    del self.values_dict[selected_key]
+                    self.values_dict[dialog_input[0]] = dialog_input[1]
             self.tree.update_contents()
         self.btn_array.disable_buttons()
+        self.master.grab_set()
 
 
 class EditableTreeFrame(ChangeableTreeFrame):
@@ -147,14 +147,14 @@ class EditableTreeFrame(ChangeableTreeFrame):
             entry_length=self.entry_length,
             empty_ok=self.empty_ok)
         dialog_input = dialog.show()
-        if dialog_input is None:
-            return
-        if dialog_input[0] in self.values_dict.keys():
-            raise KeyError(f"Key {dialog_input[0]} already exists")
-        self.values_dict[dialog_input[0]] = dialog_input[1]
+        if dialog_input:
+            if dialog_input[0] in self.values_dict.keys():
+                raise KeyError(f"Key {dialog_input[0]} already exists")
+            self.values_dict[dialog_input[0]] = dialog_input[1]
         if self.tree:
             self.tree.update_contents()
             self.btn_array.disable_buttons()
+        self.master.grab_set()
 
     def delete_selected_item(self) -> None:
         if self.tree:
@@ -209,13 +209,6 @@ class ChangeableTree(ttk.Treeview):
     def __handle_item_select(self, event: tk.Event) -> None:
         if self.__select_cmd:
             self.__select_cmd()
-
-    def __open_change_value_window(self) -> None:
-        # self.change_window = ChangeValueDialog(
-        #     master=self, labels=self.__columns,
-        #     values=("spam", "ham"))
-        # self.change_window.focus()
-        pass
 
 
 class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
