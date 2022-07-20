@@ -23,7 +23,7 @@ class ChangeableTreeFrame(ttk.LabelFrame):
         self.__columns = columns
         self.__column_texts = column_texts
         self.__height = height
-        self.changeable_flags = changeable_flags,
+        self.changeable_flags = changeable_flags
         self.dialog_title = dialog_title
         self.entry_length = entry_length
         self.empty_ok = empty_ok
@@ -74,8 +74,7 @@ class ChangeableTreeFrame(ttk.LabelFrame):
         is_resettable = True if self.__default_values else False
         self.btn_array: TreeButtonArray = ChangeTreeButtonArray(
             master=self, target_tree=self.tree,
-            edit_cmd=None,  # TODO: assign command
-            reset_cmd=self.reset_selected_item,
+            edit_cmd=self.edit_item, reset_cmd=self.reset_selected_item,
             is_resettable=is_resettable)
         self.btn_array.grid(
             column=0, columnspan=2, row=1, sticky=tk.NSEW, **PADDING_OPTIONS)
@@ -87,6 +86,26 @@ class ChangeableTreeFrame(ttk.LabelFrame):
                 self.values_dict[key] = self.__default_values[key]
             except KeyError:
                 print(f"Warning: Default value for {key} is not found")
+            self.tree.update_contents()
+        self.btn_array.disable_buttons()
+
+    def edit_item(self) -> None:
+        if self.tree:
+            selected_content = self.tree.selected_content
+            selected_key = selected_content[0]
+            dialog = ChangeValueDialog(
+                master=self, descriptions=self.column_texts,
+                values=selected_content, changeable_flags=self.changeable_flags,
+                title=self.dialog_title, entry_length=self.entry_length,
+                empty_ok=self.empty_ok)
+            dialog_input = dialog.show()
+            if dialog_input is None:
+                return
+            if dialog_input[0] == selected_key:
+                self.values_dict[selected_key] = dialog_input[1]
+            else:
+                del self.values_dict[selected_key]
+                self.values_dict[dialog_input[0]] = dialog_input[1]
             self.tree.update_contents()
         self.btn_array.disable_buttons()
 
@@ -115,19 +134,27 @@ class EditableTreeFrame(ChangeableTreeFrame):
         self.tree = cast(ChangeableTree, self.tree)
         self.btn_array = EditTreeButtonArray(
             master=self, target_tree=self.tree,
-            edit_cmd=None, add_cmd=self.add_item,  # TODO: assign command
+            edit_cmd=self.edit_item, add_cmd=self.add_item,
             del_cmd=self.delete_selected_item)
         self.btn_array.grid(
             column=0, columnspan=2, row=1, sticky=tk.NSEW, **PADDING_OPTIONS)
 
     def add_item(self) -> None:
-        # TODO: implement
         empty_values = tuple(("" for _ in range(self.column_num)))
         dialog = ChangeValueDialog(
             master=self, descriptions=self.column_texts, values=empty_values,
-            changeable_flags=None, title=self.dialog_title,
+            changeable_flags=self.changeable_flags, title=self.dialog_title,
             entry_length=self.entry_length,
             empty_ok=self.empty_ok)
+        dialog_input = dialog.show()
+        if dialog_input is None:
+            return
+        if dialog_input[0] in self.values_dict.keys():
+            raise KeyError(f"Key {dialog_input[0]} already exists")
+        self.values_dict[dialog_input[0]] = dialog_input[1]
+        if self.tree:
+            self.tree.update_contents()
+            self.btn_array.disable_buttons()
 
     def delete_selected_item(self) -> None:
         if self.tree:
@@ -230,7 +257,6 @@ class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
         raise NotImplementedError
 
     def __handle_edit_btn(self) -> None:
-        print("edit")
         if self.__edit_cmd:
             self.__edit_cmd()
 
@@ -300,7 +326,6 @@ class EditTreeButtonArray(TreeButtonArray):
         self.del_btn.configure(state=tk.DISABLED)
 
     def __handle_add_btn(self) -> None:
-        print("add")
         if self.__add_cmd:
             self.__add_cmd()
 

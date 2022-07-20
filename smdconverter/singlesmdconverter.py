@@ -46,6 +46,7 @@ OPERATION_BUTTON_TEXTS = {'open': "Open...", 'remove': "Remove",
 class App(tkdnd.Tk):
     def __init__(self) -> None:
         super().__init__()
+        print(LAUNCH_MSG)
 
         self.title(f"{ROOT_TITLE} {VERSION}")
 
@@ -73,8 +74,7 @@ class App(tkdnd.Tk):
         self.drop_target_register(tkdnd.DND_FILES)
         self.dnd_bind('<<Drop>>', self.dropped)
 
-        print(LAUNCH_MSG)
-        print("Please open smd files.")
+        print("\nPlease open smd files.")
 
     def __create_widgets(self) -> None:
         # main operation buttons

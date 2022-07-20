@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from typing import Callable, Tuple
+from typing import Callable, Tuple, Union
 from .constants import PADDING_OPTIONS
 
 from .okcancelbuttonarray import OKCancelButtonArray
@@ -41,7 +41,7 @@ class ChangeValueDialog(tk.Toplevel):
         super().__init__(*args, **kwargs)
 
         self.__descriptions = descriptions
-        self.__values = values
+        self.__values: Union[Tuple[str, ...], None] = values
         if not changeable_flags:  # if not specified, all values can be changed
             changeable_flags = tuple((True for _ in range(len(values))))
         self.__changeable_flags = changeable_flags
@@ -63,6 +63,8 @@ class ChangeValueDialog(tk.Toplevel):
         self.__update_widgets()
 
     def __create_widgets(self) -> None:
+        if not self.__values:
+            raise ValueError("got None as value")
         self.values_frame = ChangeValueFrame(
             master=self, descriptions=self.__descriptions, values=self.__values,
             changeable_flags=self.__changeable_flags,
@@ -87,6 +89,7 @@ class ChangeValueDialog(tk.Toplevel):
         self.destroy()
 
     def __cancel_command(self) -> None:
+        self.__values = None
         self.destroy()
 
     def __update_widgets(self, event: tk.Event = None) -> None:
@@ -103,7 +106,7 @@ class ChangeValueDialog(tk.Toplevel):
         else:
             return False
 
-    def show(self) -> Tuple[str, ...]:
+    def show(self) -> Union[Tuple[str, ...], None]:
         self.wm_deiconify()
         self.wait_window()
         return self.__values
@@ -154,27 +157,3 @@ class ChangeValueFrame(ttk.Frame):
     @property
     def values(self) -> Tuple[str, ...]:
         return tuple((var.get() for var in self.__vars))
-
-
-# TODO: delete on release
-if __name__ == '__main__':
-    class Example(tk.Tk):
-        def __init__(self):
-            super().__init__()
-            self.button = tk.Button(
-                self, text="Get Input", command=self.on_button)
-            self.label = tk.Label(self, text="", width=20)
-            self.button.pack(padx=8, pady=8)
-            self.label.pack(side="bottom", fill="both", expand=True)
-
-        def on_button(self):
-            dialog = ChangeValueDialog(
-                master=app, descriptions=("Detector", "Name format"),
-                values=("Andor CCD", ""), changeable_flags=(True, True),
-                title="Change values", empty_ok=False)
-            values = dialog.show()
-            print(values)
-
-    app = Example()
-
-    app.mainloop()

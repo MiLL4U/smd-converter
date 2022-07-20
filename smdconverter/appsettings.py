@@ -69,6 +69,7 @@ class ApplicationSettingsHandler:
                 settings_dict = json.load(f)
 
         else:  # make settings file and load default settings
+            print("Warning: Settings file does not exist.")
             self.save_default_settings()
             settings_dict = DEFAULT_SETTINGS
 
@@ -77,3 +78,5 @@ class ApplicationSettingsHandler:
     def save_default_settings(self) -> None:
         with open(self.__json_path, mode='w') as f:
             json.dump(DEFAULT_SETTINGS, f, indent=JSON_INDENT)
+        print("Information: Default settings "
+              f"were saved to {self.__json_path}.")

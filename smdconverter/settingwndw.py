@@ -13,6 +13,7 @@ from .editabletree import ChangeableTreeFrame, EditableTreeFrame
 from .okcancelbuttonarray import OKCancelButtonArray
 
 TREE_HEIGHT = 5
+DIALOG_TITLE = "Edit name format"
 ENTRY_LENGTH = 30
 EMPTY_OK = False
 
@@ -75,9 +76,11 @@ class SettingsWindow(tk.Toplevel):
     def __handle_ok_btn(self) -> None:
         self.__current_settings.overwrite_settings(self.__new_settings)
         self.__current_settings.save()
+        print("Information: Settings have been changed.")
         self.destroy()
 
     def __handle_cancel_btn(self) -> None:
+        print("Information: The change of settings is canceled.")
         self.destroy()
 
 
@@ -125,7 +128,7 @@ class DataFormatTreeFrame(EditableTreeFrame):
         kwargs['values_dict'] = values_dict
         kwargs['height'] = TREE_HEIGHT
         kwargs['changeable_flags'] = (True, True)
-        kwargs['dialog_title'] = "Edit name format of spectral data"
+        kwargs['dialog_title'] = DIALOG_TITLE
         kwargs['entry_length'] = ENTRY_LENGTH
         kwargs['empty_ok'] = EMPTY_OK
         super().__init__(*args, **kwargs)
@@ -140,7 +143,7 @@ class AxisFormatTreeFrame(ChangeableTreeFrame):
         kwargs['values_dict'] = values_dict
         kwargs['height'] = TREE_HEIGHT
         kwargs['changeable_flags'] = (False, True)
-        kwargs['dialog_title'] = "Edit name format of spectral axis"
+        kwargs['dialog_title'] = DIALOG_TITLE
         kwargs['entry_length'] = ENTRY_LENGTH
         kwargs['empty_ok'] = EMPTY_OK
         super().__init__(*args, **kwargs)

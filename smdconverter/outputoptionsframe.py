@@ -16,6 +16,8 @@ from .smdparser import SPECTRAL_UNITS, SpectralUnit
 DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
                                'GHz': "BrillouinShift"}
 
+ENTRY_WIDTH = 30
+
 
 class OutputOptionsFrame(ttk.LabelFrame):
     def __init__(self, master: tk.Misc, cmd_on_update: Callable[[], None],
@@ -65,7 +67,8 @@ class OutputOptionsFrame(ttk.LabelFrame):
         outname_label.grid(column=3, row=row, sticky=tk.E,
                            **PADDING_OPTIONS)
         self.outname_entry = ttk.Entry(
-            self, textvariable=self.output_name)
+            self, textvariable=self.output_name,
+            width=ENTRY_WIDTH)
         self.outname_entry.bind('<KeyRelease>', self.handle_outname_enter)
         self.outname_entry.bind(
             sequence='<KeyPress-Up>',
@@ -101,7 +104,8 @@ class OutputOptionsFrame(ttk.LabelFrame):
         sp_outname_label = ttk.Label(self, text="→ Save as ibw:")
         sp_outname_label.grid(
             column=3, row=row, sticky=tk.W, **PADDING_OPTIONS)
-        self.sp_outname_entry = ttk.Entry(self, textvariable=self.sp_outname)
+        self.sp_outname_entry = ttk.Entry(
+            self, textvariable=self.sp_outname, width=ENTRY_WIDTH)
         self.sp_outname_entry.grid(
             column=4, row=row, sticky=tk.E, **PADDING_OPTIONS)
 
