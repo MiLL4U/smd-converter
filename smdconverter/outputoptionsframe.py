@@ -6,12 +6,11 @@ from typing import Callable, Union, cast
 
 from ibwpy import BinaryWaveHeader5
 
-from smdconverter.appsettings import ApplicationSettings
-from smdconverter.nameformatter import (SpectralAxisIBWNameFormatter,
-                                        SpectralDataIBWNameFormatter)
-
+from .appsettings import ApplicationSettings
 from .constants import PADDING_OPTIONS, Direction
 from .convertjob import ConvertJob
+from .nameformatter import (SpectralAxisIBWNameFormatter,
+                            SpectralDataIBWNameFormatter)
 from .smdparser import SPECTRAL_UNITS, SpectralUnit
 
 DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
@@ -51,19 +50,19 @@ class OutputOptionsFrame(ttk.LabelFrame):
         row = 0
         # Combobox to select detector
         detector_label = ttk.Label(self, text="Detector:")
-        detector_label.grid(row=row, column=0, sticky=tk.E,
+        detector_label.grid(column=0, row=row, sticky=tk.E,
                             **PADDING_OPTIONS)
         self.detector_cb = ttk.Combobox(
             self, state='readonly', width=25,
             textvariable=self.selected_detector)
         self.detector_cb.bind('<<ComboboxSelected>>',
                               self.handle_detector_select)
-        self.detector_cb.grid(row=row, column=1, columnspan=2,
+        self.detector_cb.grid(column=1, columnspan=2, row=row,
                               sticky=tk.EW, **PADDING_OPTIONS)
 
         # Entry to set output name
         outname_label = ttk.Label(self, text="→ Output name:")
-        outname_label.grid(row=row, column=3, sticky=tk.E,
+        outname_label.grid(column=3, row=row, sticky=tk.E,
                            **PADDING_OPTIONS)
         self.outname_entry = ttk.Entry(
             self, textvariable=self.output_name)
@@ -77,40 +76,40 @@ class OutputOptionsFrame(ttk.LabelFrame):
             func=lambda event: self.handle_outname_arrow('Down'),
             add='+')
         self.outname_entry.grid(
-            row=row, column=4, sticky=tk.E, **PADDING_OPTIONS)
+            column=4, row=row, sticky=tk.E, **PADDING_OPTIONS)
 
     def __create_row1(self) -> None:
         row = 1
         # label to display max and min of spectral axis
         spaxis_label = ttk.Label(self, text="Spectral axis:")
-        spaxis_label.grid(row=row, column=0, sticky=tk.E,
+        spaxis_label.grid(column=0, row=row, sticky=tk.E,
                           **PADDING_OPTIONS)
         self.spaxis_region_label = ttk.Label(
             self, textvariable=self.spaxis_region_text)
         self.spaxis_region_label.grid(
-            row=row, column=1, sticky=tk.E, **PADDING_OPTIONS)
+            column=1, row=row, sticky=tk.E, **PADDING_OPTIONS)
 
         # Combobox to select unit of spectral axis
         self.unit_cb = ttk.Combobox(self, values=SPECTRAL_UNITS,
                                     textvariable=self.selected_unit,
                                     state='readonly', width=5)
         self.unit_cb.bind('<<ComboboxSelected>>', self.handle_unit_select)
-        self.unit_cb.grid(row=row, column=2, sticky=tk.E,
+        self.unit_cb.grid(column=2, row=row, sticky=tk.E,
                           **PADDING_OPTIONS)
 
         # Entry to set output name of spectral axis
         sp_outname_label = ttk.Label(self, text="→ Save as ibw:")
         sp_outname_label.grid(
-            row=row, column=3, sticky=tk.W, **PADDING_OPTIONS)
+            column=3, row=row, sticky=tk.W, **PADDING_OPTIONS)
         self.sp_outname_entry = ttk.Entry(self, textvariable=self.sp_outname)
         self.sp_outname_entry.grid(
-            row=row, column=4, sticky=tk.E, **PADDING_OPTIONS)
+            column=4, row=row, sticky=tk.E, **PADDING_OPTIONS)
 
         # Button to save spectral axis wave
         self.sp_save_btn = ttk.Button(
             self, text="Save", command=self.handle_spsave_btn)
         self.sp_save_btn.grid(
-            row=row, column=5, sticky=tk.W, **PADDING_OPTIONS)
+            column=5, row=row, sticky=tk.W, **PADDING_OPTIONS)
 
     def disable_widgets(self) -> None:  # when job is not selected
         self.selected_detector.set("")
@@ -140,7 +139,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
         # spectral axis
         self.update_spaxis_region()  # widgets are enabled in this method
 
-    def handle_detector_select(self, event) -> None:
+    def handle_detector_select(self, event: tk.Event) -> None:
         detector_id = int(self.selected_detector.get().split(':')[0])
         if isinstance(self.current_job, ConvertJob):
             self.current_job.select_detector(detector_id)

@@ -38,11 +38,11 @@ class ApplicationSettings:
         self.__settings_dict['general']['clearJobsOnComplete'] = flag
 
     @property
-    def ibw_name_formats(self) -> Dict[str, str]:
-        return self.__settings_dict['ibwNameFormats']
+    def data_name_formats(self) -> Dict[str, str]:
+        return self.__settings_dict['dataNameFormats']
 
-    def set_ibw_name_format(self, detector_name: str, format_: str) -> None:
-        self.__settings_dict['ibwNameFormats'][detector_name] = format_
+    def set_data_name_format(self, detector_name: str, format_: str) -> None:
+        self.__settings_dict['dataNameFormats'][detector_name] = format_
 
     @property
     def spectral_axis_name_formats(self) -> Dict[str, str]:

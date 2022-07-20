@@ -22,17 +22,15 @@ class DestinationSelector(ttk.Frame):
 
     def __create_widgets(self) -> None:
         label = ttk.Label(self, text="Save to:")
-        label.grid(row=0, column=0, sticky=tk.E, padx=5)
+        label.grid(column=0, row=0, sticky=tk.E, padx=5)
 
         self.dst_entry = ttk.Entry(
             self, textvariable=self.__dst_dir)
-        self.dst_entry.grid(row=0, column=1, sticky=tk.EW, padx=5)
+        self.dst_entry.grid(column=1, row=0, sticky=tk.EW, padx=5)
 
         self.browse_btn = ttk.Button(
-            self, text="Browse...", command=self.__handle_browsebtn,
-            # state=tk.DISABLED
-        )
-        self.browse_btn.grid(row=0, column=2, sticky=tk.W, padx=5)
+            self, text="Browse...", command=self.__handle_browsebtn)
+        self.browse_btn.grid(column=2, row=0, sticky=tk.W, padx=5)
 
     def __handle_browsebtn(self) -> None:
         dst = askdirectory()
@@ -44,4 +42,3 @@ class DestinationSelector(ttk.Frame):
 
     def reset(self) -> None:
         self.__dst_dir.set("")
-        # self.browse_btn.configure(state=tk.DISABLED)

@@ -31,8 +31,8 @@ class JobList(ttk.Treeview):
         kwargs['master'] = master
         super().__init__(columns=JOBLIST_COLUMNS, selectmode=tk.BROWSE,
                          show='headings', *args, **kwargs)
-        self.bind('<<TreeviewSelect>>', self.handle_item_select)
-        self.bind('<Double-Button-1>', self.handle_doubleclick)
+        self.bind('<<TreeviewSelect>>', self.__handle_item_select)
+        self.bind('<Double-Button-1>', self.__handle_doubleclick)
 
         # variables
         self.jobs = jobs
@@ -77,11 +77,14 @@ class JobList(ttk.Treeview):
         item_id = list(self.jobs_dict.keys())[item_id_idx]
         self.selection_add(item_id)
 
-    def handle_item_select(self, event) -> None:
+    def __handle_item_select(self, event: tk.Event) -> None:
         self.select_cmd(self.selected_job)
 
-    def handle_doubleclick(self, event) -> None:
-        selected_job = self.selected_job
+    def __handle_doubleclick(self, event: tk.Event) -> None:
+        try:
+            selected_job = self.selected_job
+        except IndexError:
+            return  # if job is not selected
         note_gen = IBWNoteGenerator(selected_job.smd_data)
         note_gen.set_detector_id(selected_job.selected_detector)
         note = note_gen.generate()

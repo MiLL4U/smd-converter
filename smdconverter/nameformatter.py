@@ -2,7 +2,7 @@ import datetime
 import os
 from typing import Tuple
 from .convertjob import ConvertJob
-from smdconverter.appsettings import ApplicationSettings
+from .appsettings import ApplicationSettings
 
 DEFAULT_NAME_FMT = "wave{}"
 
@@ -96,8 +96,13 @@ class SpectralDataIBWNameFormatter(IBWNameFormatter):
 
     def get_name(self, exist_names: Tuple[str, ...] = None) -> str:
         detector_name = self.job.selected_detector_name
-        name_fmt = self.settings.ibw_name_formats[detector_name]
-        res = self.format_name(name_fmt)
+        try:
+            name_fmt = self.settings.data_name_formats[detector_name]
+            res = self.format_name(name_fmt)
+        except KeyError:  # if format is not registered
+            print(f"Warning: Name format for {self.job.selected_detector_name} "
+                  "is not found")
+            res = self.job.smd_name  # use original name of smd
         res = self.validate_name(res)
         if exist_names:
             res = self.unique_name(res, exist_names)

@@ -88,18 +88,18 @@ class App(tkdnd.Tk):
             self, commands=op_commands, command_texts=OPERATION_BUTTON_TEXTS)
         self.disable_opbuttons()
         self.opbutton_arr.grid(
-            row=0, column=0, columnspan=2,
+            column=0, columnspan=2, row=0,
             sticky=tk.NSEW, **PADDING_OPTIONS)
 
         # list of jobs
         self.job_list = JobList(self, self.jobs, self.handle_select_job)
         self.job_list.grid(
-            row=1, column=0, sticky=tk.NSEW, **PADDING_OPTIONS)
+            column=0, row=1, sticky=tk.NSEW, **PADDING_OPTIONS)
 
         # scroll bar of job list
         self.joblist_scrl = ttk.Scrollbar(
             self, orient=tk.VERTICAL, command=self.job_list.yview)
-        self.joblist_scrl.grid(row=1, column=SCRLBAR_COLUMN, sticky=tk.NS)
+        self.joblist_scrl.grid(column=SCRLBAR_COLUMN, row=1, sticky=tk.NS)
         self.job_list.config(yscrollcommand=self.joblist_scrl.set)
 
         # output options
@@ -107,13 +107,13 @@ class App(tkdnd.Tk):
             self, self.update_options, dst_var=self.dst_dir,
             seek_cmd=self.seek_job, settings=self.__settings)
         self.outputopt_frame.grid(
-            row=3, column=0, columnspan=2,
+            column=0, columnspan=2, row=3,
             sticky=tk.NSEW, **PADDING_OPTIONS)
 
         # destination selector
         self.dst_selector = DestinationSelector(self, dst_var=self.dst_dir)
         self.dst_selector.grid(
-            row=4, column=0, columnspan=2,
+            column=0, columnspan=2, row=4,
             sticky=tk.NSEW, **PADDING_OPTIONS)
 
     def open_smd(self) -> None:

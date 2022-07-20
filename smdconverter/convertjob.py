@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import datetime
+import os
 from typing import Tuple
 
 import numpy as np
@@ -71,6 +72,17 @@ class ConvertJob:
             str: path of source file
         """
         return self.__src_path
+
+    @property
+    def smd_name(self) -> str:
+        """returns original name of smd file without extension
+
+        Returns:
+            str: original name of smd
+        """
+        name, _ = os.path.splitext(
+            os.path.basename(self.src_path))
+        return name
 
     @property
     def detector_ids(self) -> Tuple[int, ...]:

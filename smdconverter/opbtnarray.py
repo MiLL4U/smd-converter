@@ -30,7 +30,7 @@ class OperationButtonArray(ttk.Frame):
                 self, text=self.__command_texts[cmd_name],
                 command=self.__commands[cmd_name])
             self.__buttons[cmd_name] = button
-            button.grid(row=0, column=i, padx=5)
+            button.grid(column=i, row=0, padx=5)
 
     def enable(self, cmd_name: str) -> None:
         self.__buttons[cmd_name].configure(state=tk.NORMAL)

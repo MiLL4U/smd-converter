@@ -12,6 +12,6 @@ Launch GUI application with:
 
 """
 
-from smdconverter.singlesmdconverter import App
+from .singlesmdconverter import App
 
 __all__ = ['App']

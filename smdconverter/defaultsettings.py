@@ -1,11 +1,12 @@
 DEFAULT_SETTINGS = {
     "general": {
-        "loadMultipleDetectors": False,
+        "loadMultipleDetectors": True,
         "clearJobsOnComplete": False
     },
-    "ibwNameFormats": {
+    "dataNameFormats": {
         "HyperFine": "%O_br",
-        "Andor CCD": "%O_rm"
+        "Andor CCD": "%O_rm",
+        "Multi-channel NI-ADCmx": "%O_ni"
     },
     "spectralAxisNameFormats": {
         "nm": "Wavelength_%Y%m%d",

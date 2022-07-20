@@ -24,3 +24,9 @@ class OKCancelButtonArray(ttk.Frame):
         self.ok_btn = ttk.Button(
             self, text="OK", command=self.__ok_cmd)
         self.ok_btn.pack(side=tk.RIGHT, **PADDING_OPTIONS)
+
+    def enable_ok_btn(self) -> None:
+        self.ok_btn.configure(state=tk.NORMAL)
+
+    def disable_ok_btn(self) -> None:
+        self.ok_btn.configure(state=tk.DISABLED)
