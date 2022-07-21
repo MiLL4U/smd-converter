@@ -41,9 +41,12 @@ class SettingsWindow(tk.Toplevel):
         self.__new_settings = deepcopy(settings)
 
         self.__create_widgets()
+        self.focus()
         self.grab_set()  # make this window modal
         self.transient()  # Disable this window on the taskbar
         self.resizable(False, False)
+        self.bind('<Return>', self.__handle_ok_btn)
+        self.bind('<Escape>', self.__handle_cancel_btn)
 
     def __create_widgets(self) -> None:
         self.general_frame = GeneralSettingsFrame(self, self.__new_settings)
@@ -81,13 +84,13 @@ class SettingsWindow(tk.Toplevel):
         self.okcancel_btns.grid(
             column=0, row=4, sticky=tk.EW)
 
-    def __handle_ok_btn(self) -> None:
+    def __handle_ok_btn(self, event: tk.Event = None) -> None:
         self.__current_settings.overwrite_settings(self.__new_settings)
         self.__current_settings.save()
         print("Information: Settings have been changed.")
         self.destroy()
 
-    def __handle_cancel_btn(self) -> None:
+    def __handle_cancel_btn(self, event: tk.Event = None) -> None:
         print("Information: The change of settings is canceled.")
         self.destroy()
 

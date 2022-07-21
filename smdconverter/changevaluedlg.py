@@ -55,9 +55,12 @@ class ChangeValueDialog(tk.Toplevel):
         self.rowconfigure(1, weight=0)  # ok and cancel buttons
 
         self.__create_widgets()
+        self.focus()
         self.grab_set()  # make this window modal
         self.transient()  # Disable this window on the taskbar
         self.resizable(False, False)
+        self.bind('<Return>', self.__ok_command)
+        self.bind('<Escape>', self.__cancel_command)
 
         self.__update_widgets()
 
@@ -83,11 +86,11 @@ class ChangeValueDialog(tk.Toplevel):
     def values(self) -> Tuple[str, ...]:
         return self.values_frame.values
 
-    def __ok_command(self) -> None:
+    def __ok_command(self, event: tk.Event = None) -> None:
         self.__values = self.values
         self.destroy()
 
-    def __cancel_command(self) -> None:
+    def __cancel_command(self, event: tk.Event = None) -> None:
         self.__values = None
         self.destroy()
 
