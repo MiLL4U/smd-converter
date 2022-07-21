@@ -59,7 +59,7 @@ class ChangeValueDialog(tk.Toplevel):
         self.grab_set()  # make this window modal
         self.transient()  # Disable this window on the taskbar
         self.resizable(False, False)
-        self.bind('<Return>', self.__ok_command)
+        self.bind('<Return>', self.__handle_return_key)
         self.bind('<Escape>', self.__cancel_command)
 
         self.__update_widgets()
@@ -93,6 +93,10 @@ class ChangeValueDialog(tk.Toplevel):
     def __cancel_command(self, event: tk.Event = None) -> None:
         self.__values = None
         self.destroy()
+
+    def __handle_return_key(self, event: tk.Event = None) -> None:
+        if self.validate_values():
+            self.__ok_command()
 
     def __update_widgets(self, event: tk.Event = None) -> None:
         if self.validate_values():
