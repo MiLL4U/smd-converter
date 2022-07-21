@@ -120,7 +120,7 @@ class GeneralSettingsFrame(ttk.LabelFrame):
 
         self.clear_jobs_chkbox = ttk.Checkbutton(
             self, command=self.__update_settings,
-            text="Clear all jobs when comversion is completed",
+            text="Clear all jobs when conversion is completed",
             variable=self.__clear_jobs_flag)
         self.clear_jobs_chkbox.grid(
             column=0, row=1, sticky=tk.W, **PADDING_OPTIONS)
