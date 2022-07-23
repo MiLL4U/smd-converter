@@ -53,22 +53,26 @@ class SettingsWindow(tk.Toplevel):
         self.general_frame.grid(
             column=0, row=0, sticky=tk.NSEW, **PADDING_OPTIONS)
 
-        self.data_fmt_frame = DataFormatTreeFrame(
+        self.data_fmt_frame = EditableTreeFrame(
             master=self, columns=SPECTRAL_DATA_FORMAT_COLUMNS,
             column_texts=SPECTRAL_DATA_FORMAT_COLUMN_TEXTS,
             values_dict=self.__new_settings.data_name_formats,
-            height=5, text="Wave name format (spectral data)")
+            height=TREE_HEIGHT, changeable_flags=(True, True),
+            dialog_title=DIALOG_TITLE, entry_length=ENTRY_LENGTH,
+            empty_ok=EMPTY_OK, text="Wave name format (spectral data)")
         self.data_fmt_frame.grid(
             column=0, row=1, sticky=tk.EW, **PADDING_OPTIONS)
 
         default_axis_fmt = DEFAULT_SETTINGS['spectralAxisNameFormats']
         default_axis_fmt = cast(Dict[str, str], default_axis_fmt)
-        self.axis_fmt_frame = AxisFormatTreeFrame(
+        self.axis_fmt_frame = ChangeableTreeFrame(
             master=self, columns=SPECTRAL_AXIS_FORMAT_COLUMNS,
             column_texts=SPECTRAL_AXIS_FORMAT_COLUMN_TEXTS,
             values_dict=self.__new_settings.spectral_axis_name_formats,
-            default_values=default_axis_fmt,
-            height=5, text="Wave name format (spectral axis)")
+            default_values=default_axis_fmt, height=5,
+            changeable_flags=(False, True),
+            dialog_title=DIALOG_TITLE, entry_length=ENTRY_LENGTH,
+            empty_ok=EMPTY_OK, text="Wave name format (spectral axis)")
         self.axis_fmt_frame.grid(
             column=0, row=2, sticky=tk.EW, **PADDING_OPTIONS)
 
@@ -128,33 +132,3 @@ class GeneralSettingsFrame(ttk.LabelFrame):
     def __update_settings(self) -> None:
         self.__settings.set_multi_jobs_flag(self.__multi_job_flag.get())
         self.__settings.set_clear_jobs_flag(self.__clear_jobs_flag.get())
-
-
-class DataFormatTreeFrame(EditableTreeFrame):
-    def __init__(self, master: tk.Misc, values_dict: Dict[str, str],
-                 *args, **kwargs):
-        kwargs['master'] = master
-        kwargs['columns'] = SPECTRAL_DATA_FORMAT_COLUMNS
-        kwargs['column_texts'] = SPECTRAL_DATA_FORMAT_COLUMN_TEXTS
-        kwargs['values_dict'] = values_dict
-        kwargs['height'] = TREE_HEIGHT
-        kwargs['changeable_flags'] = (True, True)
-        kwargs['dialog_title'] = DIALOG_TITLE
-        kwargs['entry_length'] = ENTRY_LENGTH
-        kwargs['empty_ok'] = EMPTY_OK
-        super().__init__(*args, **kwargs)
-
-
-class AxisFormatTreeFrame(ChangeableTreeFrame):
-    def __init__(self, master: tk.Misc, values_dict: Dict[str, str],
-                 *args, **kwargs):
-        kwargs['master'] = master
-        kwargs['columns'] = SPECTRAL_AXIS_FORMAT_COLUMNS
-        kwargs['column_texts'] = SPECTRAL_AXIS_FORMAT_COLUMN_TEXTS
-        kwargs['values_dict'] = values_dict
-        kwargs['height'] = TREE_HEIGHT
-        kwargs['changeable_flags'] = (False, True)
-        kwargs['dialog_title'] = DIALOG_TITLE
-        kwargs['entry_length'] = ENTRY_LENGTH
-        kwargs['empty_ok'] = EMPTY_OK
-        super().__init__(*args, **kwargs)
