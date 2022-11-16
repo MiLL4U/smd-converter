@@ -59,7 +59,7 @@ class SimpledSMDIBWConverter:
         return note
 
     def __transpose_spatial_axis(self, src: np.ndarray) -> np.ndarray:
-        """transpose axis of spatial dimension from smd to ibwo format
+        """transpose axis of spatial dimension from smd to ibw format
         In smd file, order of spatial dimension is z, y, x,
         while x, y, z in ibw file.
         """
