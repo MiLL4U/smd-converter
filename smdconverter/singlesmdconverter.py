@@ -32,7 +32,6 @@ LAUNCH_MSG = f"{ROOT_TITLE} {VERSION}\n" + \
 FILE_TYPES = (
     ("SMD spectral data", '*.smd'),
     ("All files", '*.*'))
-DEFAULT_NAME_FMT = "wave{}"
 
 # layout options
 SCRLBAR_COLUMN = 1  # column which contains scroll bar in main window
