@@ -29,7 +29,7 @@ $ python -m pip install git+https://github.com/MiLL4U/smd-converter.git
 ```bash
 $ python -m pip install smdconverter-x.y.z-py3-none-any.whl
 ```
-<span style="color: #FFAAAA">(replace x.y.z with the version of SMD Converter which you downloaded)</span>
+(replace x.y.z with the version of SMD Converter which you downloaded)
 
 ### Install with git clone
 1. Install [ibwpy](https://github.com/MiLL4U/ibwpy) to your Python environment
