@@ -13,13 +13,12 @@ from .nameformatter import (SpectralAxisIBWNameFormatter,
                             SpectralDataIBWNameFormatter)
 from .smdparser import SPECTRAL_UNITS, SpectralUnit
 
-DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
-                               'GHz': "BrillouinShift"}
-
-ENTRY_WIDTH = 30
-
 
 class OutputOptionsFrame(ttk.LabelFrame):
+    DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
+                                   'GHz': "BrillouinShift"}
+    ENTRY_WIDTH = 30
+
     def __init__(self, master: tk.Misc, cmd_on_update: Callable[[], None],
                  dst_var: tk.StringVar, seek_cmd: Callable[[Direction], None],
                  settings: ApplicationSettings,
@@ -68,7 +67,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
                            **PADDING_OPTIONS)
         self.outname_entry = ttk.Entry(
             self, textvariable=self.output_name,
-            width=ENTRY_WIDTH)
+            width=self.ENTRY_WIDTH)
         self.outname_entry.bind('<KeyRelease>', self.handle_outname_enter)
         self.outname_entry.bind(
             sequence='<KeyPress-Up>',
@@ -105,7 +104,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
         sp_outname_label.grid(
             column=3, row=row, sticky=tk.W, **PADDING_OPTIONS)
         self.sp_outname_entry = ttk.Entry(
-            self, textvariable=self.sp_outname, width=ENTRY_WIDTH)
+            self, textvariable=self.sp_outname, width=self.ENTRY_WIDTH)
         self.sp_outname_entry.grid(
             column=4, row=row, sticky=tk.E, **PADDING_OPTIONS)
 
@@ -178,7 +177,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
             else:
                 arr = self.current_job.spectral_axis_array(unit)
                 self.spaxis_region_text.set(f"{arr[0]:.1f} ~ {arr[-1]:.1f}")
-                self.sp_outname.set(DEFAULT_SPECTRAL_AXIS_NAMES[unit])
+                self.sp_outname.set(self.DEFAULT_SPECTRAL_AXIS_NAMES[unit])
 
                 name_formatter = SpectralAxisIBWNameFormatter(
                     job=self.current_job, settings=self.__settings)
