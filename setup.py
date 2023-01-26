@@ -8,12 +8,14 @@ def _requires_from_file(filename: str) -> List[str]:
 
 setuptools.setup(
     name="smdconverter",
-    version="1.2.0",
+    version="1.3.0",
     install_requires=_requires_from_file('requirements.txt'),
     author="Hiroaki Takahashi",
     author_email="aphiloboe@gmail.com",
+    url="https://github.com/MiLL4U/smd-converter",
     description="GUI application to convert smd files into ibw files",
     packages=setuptools.find_packages(),
+    package_data={"smdconverter": ["image/*"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",

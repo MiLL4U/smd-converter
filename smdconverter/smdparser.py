@@ -10,12 +10,9 @@ from typing_extensions import Literal
 SpatialAxisName = Literal['Z', 'Y', 'X']
 SpectralUnit = Literal['nm', 'cm-1', 'GHz']
 
-XML_BORDER = b'</SCANDATA>\x0d\x0a'
-SPATIAL_AXES: Tuple[SpatialAxisName, ...] = ('Z', 'Y', 'X')
 SPECTRAL_UNITS = ('nm', 'cm-1', 'GHz')
 
 DTYPE = np.float32
-LIGHT_C = 2.998e8  # m/s
 
 
 class HeaderDict:
@@ -119,6 +116,7 @@ class FrameOptions(HeaderDict):
 
 
 class Stage3DParameters(HeaderDict):
+    SPATIAL_AXES: Tuple[SpatialAxisName, ...] = ('Z', 'Y', 'X')
     """handle Stage3DParameters data in a xml header of smd file
     It contains sizes of each spatial axis,
     and detail information of each spatial axis.
@@ -127,7 +125,7 @@ class Stage3DParameters(HeaderDict):
     def __init__(self, data_dict: OrderedDict) -> None:
         super().__init__(data_dict)
 
-        self.axis_names = SPATIAL_AXES
+        self.axis_names = self.SPATIAL_AXES
 
         self.axes: Dict[SpatialAxisName, StageAxisInfo] = {
             axis_name: StageAxisInfo(
@@ -253,6 +251,7 @@ class ChannelInfo(HeaderDict):
 
 
 class SMDParser:
+    XML_BORDER = b'</SCANDATA>\x0d\x0a'
     """Parser of any types of smd file
 
     smd files save full spectrum data as multi-dimensonal array.
@@ -271,8 +270,8 @@ class SMDParser:
     """
 
     def __init__(self, smd_buffer: bytes) -> None:
-        header_buf, body_buf = smd_buffer.split(XML_BORDER)
-        header_buf = header_buf + XML_BORDER
+        header_buf, body_buf = smd_buffer.split(self.XML_BORDER)
+        header_buf = header_buf + self.XML_BORDER
 
         self.header = SMDHeader(header_buf)
         self.__body_buffer = body_buf
@@ -348,6 +347,7 @@ class SMDParser:
 
 
 class SimpledSMDParser(SMDParser):
+    LIGHT_C = 2.998e8  # m/s
     """Parser of smd files which have only one channel for each detector
     and only one series
 
@@ -460,8 +460,8 @@ class SimpledSMDParser(SMDParser):
         elif unit == 'cm-1':
             res = (1 / self.excite_nm - 1 / wlength) * 1e7
         elif unit == 'GHz':
-            excite_ghz = LIGHT_C / self.excite_nm
-            bril_ghz = LIGHT_C / wlength
+            excite_ghz = self.LIGHT_C / self.excite_nm
+            bril_ghz = self.LIGHT_C / wlength
             res = excite_ghz - bril_ghz
         else:
             raise ValueError(f"got invalid unit ({unit})")

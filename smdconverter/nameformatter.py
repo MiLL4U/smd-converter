@@ -5,10 +5,10 @@ from typing import Tuple
 from .appsettings import ApplicationSettings
 from .convertjob import ConvertJob
 
-DEFAULT_NAME_FMT = "wave{}"
-
 
 class IBWNameFormatter:
+    DEFAULT_NAME_FMT = "wave{}"
+
     def __init__(self, job: ConvertJob, settings: ApplicationSettings,
                  print_warning: bool = True) -> None:
         self.__job = job
@@ -41,7 +41,7 @@ class IBWNameFormatter:
 
     def validate_first_character(self, name: str) -> str:
         if not name[0].isalpha():
-            name = DEFAULT_NAME_FMT.format(name)
+            name = self.DEFAULT_NAME_FMT.format(name)
             if self.print_warning:
                 print("Warning: wave name must start with an alphabet")
         return name

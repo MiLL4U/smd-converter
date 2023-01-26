@@ -6,18 +6,18 @@ from typing import Callable, Dict, List
 from .convertjob import ConvertJob
 from .notegen import IBWNoteGenerator
 
-JOBLIST_COLUMNS = ('src_file', 'detector_name', 'shape',
-                   'date', 'out_name')
-JOBLIST_COLUMN_TEXTS = {'src_file': "Source file", 'detector_name': "Detector",
-                        'shape': "Array size", 'date': "Acquisition date",
-                        'out_name': "Output name"}
-JOBLIST_COLUMN_WIDTH = {'src_file': 400, 'detector_name': 100,
-                        'shape': 120, 'date': 120, 'out_name': 150}
-JOBLIST_STRETCHABLE_COLUMN = 'src_file'
-DATETIME_FMT = "%Y/%m/%d %H:%M"
-
 
 class JobList(ttk.Treeview):
+    COLUMN_NAMES = ('src_file', 'detector_name', 'shape',
+                    'date', 'out_name')
+    COLUMN_TEXTS = {'src_file': "Source file", 'detector_name': "Detector",
+                    'shape': "Array size", 'date': "Acquisition date",
+                    'out_name': "Output name"}
+    COLUMN_WIDTH = {'src_file': 400, 'detector_name': 100,
+                    'shape': 120, 'date': 120, 'out_name': 150}
+    STRETCHABLE_COLUMN = 'src_file'
+    DATETIME_FMT = "%Y/%m/%d %H:%M"
+
     def __init__(self, master: tk.Misc, jobs: List[ConvertJob],
                  select_cmd: Callable[[ConvertJob], None], *args, **kwargs):
         """Treeview which displays convert jobs
@@ -29,7 +29,7 @@ class JobList(ttk.Treeview):
                 command run on select item
         """
         kwargs['master'] = master
-        super().__init__(columns=JOBLIST_COLUMNS, selectmode=tk.BROWSE,
+        super().__init__(columns=self.COLUMN_NAMES, selectmode=tk.BROWSE,
                          show='headings', *args, **kwargs)
         self.bind('<<TreeviewSelect>>', self.__handle_item_select)
         self.bind('<Double-Button-1>', self.__handle_doubleclick)
@@ -43,12 +43,12 @@ class JobList(ttk.Treeview):
         self.update_contents()
 
     def __layout_columns(self) -> None:
-        for column in JOBLIST_COLUMNS:
-            self.heading(column, text=JOBLIST_COLUMN_TEXTS[column])
+        for column in self.COLUMN_NAMES:
+            self.heading(column, text=self.COLUMN_TEXTS[column])
             self.column(
-                column, width=JOBLIST_COLUMN_WIDTH[column], stretch=False)
+                column, width=self.COLUMN_WIDTH[column], stretch=False)
         self.column(   # let one column stretchable
-            JOBLIST_STRETCHABLE_COLUMN, stretch=True)
+            self.STRETCHABLE_COLUMN, stretch=True)
 
     def update_contents(self) -> None:
         """update display"""
@@ -58,7 +58,9 @@ class JobList(ttk.Treeview):
         self.jobs_dict.clear()
         for job in self.jobs:
             row = (job.src_path, job.selected_detector_name_with_id,
-                   str(job.shape), job.creation_time.strftime(DATETIME_FMT),
+                   str(job.shape),
+                   job.creation_time.strftime(
+                       self.DATETIME_FMT),
                    job.output_name)
             id_ = self.insert('', tk.END, values=row)
             self.jobs_dict[id_] = job

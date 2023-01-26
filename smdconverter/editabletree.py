@@ -3,10 +3,8 @@ from abc import ABCMeta, abstractmethod
 from tkinter import ttk
 from typing import Callable, Dict, Tuple, Union, cast
 
-from .changevaluedlg import DEFAULT_LENGTH, DEFAULT_TITLE, ChangeValueDialog
-from .constants import PADDING_OPTIONS
-
-BUTTON_WIDTH = 6
+from .changevaluedlg import DEFAULT_LENGTH, ChangeValueDialog
+from .constants import IMAGE_PATH, PADDING_OPTIONS
 
 
 class ChangeableTreeFrame(ttk.LabelFrame):
@@ -14,7 +12,7 @@ class ChangeableTreeFrame(ttk.LabelFrame):
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
                  default_values: Dict[str, str] = None,
                  height: int = 5, changeable_flags: Tuple[bool, ...] = None,
-                 dialog_title: str = DEFAULT_TITLE,
+                 dialog_title: str = ChangeValueDialog.DEFAULT_TITLE,
                  entry_length: int = DEFAULT_LENGTH,
                  empty_ok: bool = False,
                  *args, **kwargs) -> None:
@@ -115,7 +113,7 @@ class EditableTreeFrame(ChangeableTreeFrame):
     def __init__(self, master: tk.Misc, columns: Tuple[str, ...],
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
                  height: int = 5, changeable_flags: Tuple[bool, ...] = None,
-                 dialog_title: str = DEFAULT_TITLE,
+                 dialog_title: str = ChangeValueDialog.DEFAULT_TITLE,
                  entry_length: int = DEFAULT_LENGTH,
                  empty_ok: bool = False, *args, **kwargs) -> None:
         kwargs['master'] = master
@@ -212,6 +210,11 @@ class ChangeableTree(ttk.Treeview):
 
 
 class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
+    EDIT_ICON_ENABLED = IMAGE_PATH + "edit.png"
+    EDIT_ICON_DISABLED = IMAGE_PATH + "edit_gray.png"
+
+    BUTTON_WIDTH = 6
+
     def __init__(self, master: tk.Misc, target_tree: ChangeableTree,
                  edit_cmd: Callable[[], None] = None,
                  *args, **kwargs) -> None:
@@ -224,9 +227,11 @@ class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
         self.__create_widgets()
 
     def __create_widgets(self) -> None:
+        self.edit_icon = tk.PhotoImage(file=self.EDIT_ICON_DISABLED)
         self.edit_btn = ttk.Button(
             self, text="Edit", command=self.__handle_edit_btn,
-            state=tk.DISABLED, width=BUTTON_WIDTH)
+            state=tk.DISABLED, width=self.BUTTON_WIDTH,
+            image=self.edit_icon, compound=tk.LEFT)
         self.edit_btn.pack(side=tk.RIGHT)
 
     @abstractmethod
@@ -234,6 +239,7 @@ class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
         raise NotImplementedError
 
     def enable_buttons(self) -> None:
+        self.edit_icon.configure(file=self.EDIT_ICON_ENABLED)
         self.edit_btn.configure(state=tk.NORMAL)
         self.enable_additional_buttons()
 
@@ -242,6 +248,7 @@ class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
         raise NotImplementedError
 
     def disable_buttons(self) -> None:
+        self.edit_icon.configure(file=self.EDIT_ICON_DISABLED)
         self.edit_btn.configure(state=tk.DISABLED)
         self.disable_additional_buttons()
 
@@ -255,6 +262,9 @@ class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
 
 
 class ChangeTreeButtonArray(TreeButtonArray):
+    RESET_ICON_ENABLED = IMAGE_PATH + "restart.png"
+    RESET_ICON_DISABLED = IMAGE_PATH + "restart_gray.png"
+
     def __init__(self, master: tk.Misc, target_tree: ChangeableTree,
                  edit_cmd: Callable[[], None] = None,
                  reset_cmd: Callable[[], None] = None,
@@ -270,16 +280,20 @@ class ChangeTreeButtonArray(TreeButtonArray):
         self.__is_resettable = is_resettable
 
     def create_additional_widgets(self) -> None:
+        self.reset_icon = tk.PhotoImage(file=self.RESET_ICON_DISABLED)
         self.reset_btn = ttk.Button(
             self, text="Reset", command=self.__handle_reset_btn,
-            state=tk.DISABLED, width=BUTTON_WIDTH)
+            state=tk.DISABLED, width=self.BUTTON_WIDTH,
+            image=self.reset_icon, compound=tk.LEFT)
         self.reset_btn.pack(side=tk.RIGHT)
 
     def enable_additional_buttons(self) -> None:
         if self.__is_resettable:
+            self.reset_icon.configure(file=self.RESET_ICON_ENABLED)
             self.reset_btn.configure(state=tk.NORMAL)
 
     def disable_additional_buttons(self):
+        self.reset_icon.configure(file=self.RESET_ICON_DISABLED)
         self.reset_btn.configure(state=tk.DISABLED)
 
     def __handle_reset_btn(self) -> None:
@@ -288,6 +302,11 @@ class ChangeTreeButtonArray(TreeButtonArray):
 
 
 class EditTreeButtonArray(TreeButtonArray):
+    ADD_ICON_ENABLED = IMAGE_PATH + "add.png"
+    ADD_ICON_DISABLED = IMAGE_PATH + "add_gray.png"
+    DELETE_ICON_ENABLED = IMAGE_PATH + "subtract.png"
+    DELETE_ICON_DISABLED = IMAGE_PATH + "subtract_gray.png"
+
     def __init__(self, master: tk.Misc, target_tree: ChangeableTree,
                  edit_cmd: Callable[[], None] = None,
                  add_cmd: Callable[[], None] = None,
@@ -302,20 +321,26 @@ class EditTreeButtonArray(TreeButtonArray):
         self.__del_cmd = del_cmd
 
     def create_additional_widgets(self) -> None:
+        self.del_icon = tk.PhotoImage(file=self.DELETE_ICON_DISABLED)
         self.del_btn = ttk.Button(
-            self, text="-", command=self.__handle_del_btn,
-            state=tk.DISABLED, width=BUTTON_WIDTH)
+            self, text="Delete", command=self.__handle_del_btn,
+            state=tk.DISABLED, width=self.BUTTON_WIDTH,
+            image=self.del_icon, compound=tk.LEFT)
         self.del_btn.pack(side=tk.RIGHT)
 
+        self.add_icon = tk.PhotoImage(file=self.ADD_ICON_ENABLED)
         self.add_btn = ttk.Button(
-            self, text="+", command=self.__handle_add_btn,
-            width=BUTTON_WIDTH)
+            self, text="Add", command=self.__handle_add_btn,
+            width=self.BUTTON_WIDTH,
+            image=self.add_icon, compound=tk.LEFT)
         self.add_btn.pack(side=tk.RIGHT)
 
     def enable_additional_buttons(self) -> None:
+        self.del_icon.configure(file=self.DELETE_ICON_ENABLED)
         self.del_btn.configure(state=tk.NORMAL)
 
     def disable_additional_buttons(self):
+        self.del_icon.configure(file=self.DELETE_ICON_DISABLED)
         self.del_btn.configure(state=tk.DISABLED)
 
     def __handle_add_btn(self) -> None:

@@ -7,19 +7,21 @@ from typing import Callable, Union, cast
 from ibwpy import BinaryWaveHeader5
 
 from .appsettings import ApplicationSettings
-from .constants import PADDING_OPTIONS, Direction
+from .constants import IMAGE_PATH, PADDING_OPTIONS, Direction
 from .convertjob import ConvertJob
 from .nameformatter import (SpectralAxisIBWNameFormatter,
                             SpectralDataIBWNameFormatter)
 from .smdparser import SPECTRAL_UNITS, SpectralUnit
 
-DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
-                               'GHz': "BrillouinShift"}
-
-ENTRY_WIDTH = 30
-
 
 class OutputOptionsFrame(ttk.LabelFrame):
+    SAVE_ICON_ENABLED = IMAGE_PATH + "save.png"
+    SAVE_ICON_DISABLED = IMAGE_PATH + "save_gray.png"
+
+    DEFAULT_SPECTRAL_AXIS_NAMES = {'nm': "Wavelength", 'cm-1': "RamanShift",
+                                   'GHz': "BrillouinShift"}
+    ENTRY_WIDTH = 30
+
     def __init__(self, master: tk.Misc, cmd_on_update: Callable[[], None],
                  dst_var: tk.StringVar, seek_cmd: Callable[[Direction], None],
                  settings: ApplicationSettings,
@@ -68,7 +70,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
                            **PADDING_OPTIONS)
         self.outname_entry = ttk.Entry(
             self, textvariable=self.output_name,
-            width=ENTRY_WIDTH)
+            width=self.ENTRY_WIDTH)
         self.outname_entry.bind('<KeyRelease>', self.handle_outname_enter)
         self.outname_entry.bind(
             sequence='<KeyPress-Up>',
@@ -105,13 +107,15 @@ class OutputOptionsFrame(ttk.LabelFrame):
         sp_outname_label.grid(
             column=3, row=row, sticky=tk.W, **PADDING_OPTIONS)
         self.sp_outname_entry = ttk.Entry(
-            self, textvariable=self.sp_outname, width=ENTRY_WIDTH)
+            self, textvariable=self.sp_outname, width=self.ENTRY_WIDTH)
         self.sp_outname_entry.grid(
             column=4, row=row, sticky=tk.E, **PADDING_OPTIONS)
 
         # Button to save spectral axis wave
+        self.sp_save_icon = tk.PhotoImage(file=self.SAVE_ICON_ENABLED)
         self.sp_save_btn = ttk.Button(
-            self, text="Save", command=self.handle_spsave_btn)
+            self, text="Save", command=self.handle_spsave_btn,
+            image=self.sp_save_icon, compound=tk.LEFT)
         self.sp_save_btn.grid(
             column=5, row=row, sticky=tk.W, **PADDING_OPTIONS)
 
@@ -125,6 +129,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
         self.unit_cb.configure(state=tk.DISABLED)
         self.sp_outname.set("")
         self.sp_outname_entry.configure(state=tk.DISABLED)
+        self.sp_save_icon.configure(file=self.SAVE_ICON_DISABLED)
         self.sp_save_btn.configure(state=tk.DISABLED)
 
     def update_target_job(self, job: ConvertJob) -> None:
@@ -174,11 +179,13 @@ class OutputOptionsFrame(ttk.LabelFrame):
                 self.unit_cb.configure(state=tk.DISABLED)
                 self.sp_outname.set("")
                 self.sp_outname_entry.configure(state=tk.DISABLED)
+                self.sp_save_icon.configure(
+                    file=self.SAVE_ICON_DISABLED)
                 self.sp_save_btn.configure(state=tk.DISABLED)
             else:
                 arr = self.current_job.spectral_axis_array(unit)
                 self.spaxis_region_text.set(f"{arr[0]:.1f} ~ {arr[-1]:.1f}")
-                self.sp_outname.set(DEFAULT_SPECTRAL_AXIS_NAMES[unit])
+                self.sp_outname.set(self.DEFAULT_SPECTRAL_AXIS_NAMES[unit])
 
                 name_formatter = SpectralAxisIBWNameFormatter(
                     job=self.current_job, settings=self.__settings)
@@ -186,6 +193,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
 
                 self.unit_cb.configure(state='readonly')
                 self.sp_outname_entry.configure(state=tk.NORMAL)
+                self.sp_save_icon.configure(file=self.SAVE_ICON_ENABLED)
                 self.sp_save_btn.configure(state=tk.NORMAL)
 
     def handle_unit_select(self, *args) -> None:

@@ -1,8 +1,9 @@
+import pkg_resources
 from typing import Any, Dict
 
 from typing_extensions import Literal
 
-VERSION = "1.2.0"
+VERSION = "1.3.0"
 GITHUB_URL = "https://github.com/MiLL4U/smd-converter/releases"
 
 # literals
@@ -10,6 +11,9 @@ Direction = Literal['Up', 'Down']
 
 # layout options
 PADDING_OPTIONS: Dict[str, Any] = {'padx': 5, 'pady': 5}
+
+# assets
+IMAGE_PATH = pkg_resources.resource_filename('smdconverter', 'image/')
 
 # file paths
 SETTINGS_JSON_PATH = "settings.json"
