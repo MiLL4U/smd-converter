@@ -14,6 +14,7 @@ setuptools.setup(
     author_email="aphiloboe@gmail.com",
     description="GUI application to convert smd files into ibw files",
     packages=setuptools.find_packages(),
+    # TODO: add package_data
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -21,3 +22,4 @@ setuptools.setup(
     ],
     python_requires='>=3.7',
 )
+# TODO: add wheel package
