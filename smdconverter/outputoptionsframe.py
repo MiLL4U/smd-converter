@@ -7,7 +7,7 @@ from typing import Callable, Union, cast
 from ibwpy import BinaryWaveHeader5
 
 from .appsettings import ApplicationSettings
-from .constants import PADDING_OPTIONS, Direction
+from .constants import IMAGE_PATH, PADDING_OPTIONS, Direction
 from .convertjob import ConvertJob
 from .nameformatter import (SpectralAxisIBWNameFormatter,
                             SpectralDataIBWNameFormatter)
@@ -110,8 +110,10 @@ class OutputOptionsFrame(ttk.LabelFrame):
             column=4, row=row, sticky=tk.E, **PADDING_OPTIONS)
 
         # Button to save spectral axis wave
+        self.sp_save_icon = tk.PhotoImage(file=IMAGE_PATH+"save.png")
         self.sp_save_btn = ttk.Button(
-            self, text="Save", command=self.handle_spsave_btn)
+            self, text="Save", command=self.handle_spsave_btn,
+            image=self.sp_save_icon, compound=tk.LEFT)
         self.sp_save_btn.grid(
             column=5, row=row, sticky=tk.W, **PADDING_OPTIONS)
 
@@ -125,6 +127,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
         self.unit_cb.configure(state=tk.DISABLED)
         self.sp_outname.set("")
         self.sp_outname_entry.configure(state=tk.DISABLED)
+        self.sp_save_icon.configure(file=IMAGE_PATH+"save_gray.png")
         self.sp_save_btn.configure(state=tk.DISABLED)
 
     def update_target_job(self, job: ConvertJob) -> None:
@@ -174,6 +177,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
                 self.unit_cb.configure(state=tk.DISABLED)
                 self.sp_outname.set("")
                 self.sp_outname_entry.configure(state=tk.DISABLED)
+                self.sp_save_icon.configure(file=IMAGE_PATH+"save_gray.png")
                 self.sp_save_btn.configure(state=tk.DISABLED)
             else:
                 arr = self.current_job.spectral_axis_array(unit)
@@ -186,6 +190,7 @@ class OutputOptionsFrame(ttk.LabelFrame):
 
                 self.unit_cb.configure(state='readonly')
                 self.sp_outname_entry.configure(state=tk.NORMAL)
+                self.sp_save_icon.configure(file=IMAGE_PATH+"save.png")
                 self.sp_save_btn.configure(state=tk.NORMAL)
 
     def handle_unit_select(self, *args) -> None:
