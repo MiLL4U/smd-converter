@@ -1,0 +1,16 @@
+source: https://remixicon.com/
+size: 24px
+
+folder_open: #E67E22
+subtract: #E74C3C
+loader: #3298DB
+check: #2FCC71
+settings: #34485E
+close: #E74C3C
+folder_received: #E67E22
+save: #3298DB
+edit: #E67E22
+add: #2FCC71
+restart: #3298DB
+
+disabled: #95A4A6

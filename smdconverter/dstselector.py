@@ -2,9 +2,12 @@ import os
 import tkinter as tk
 from tkinter import ttk
 from tkinter.filedialog import askdirectory
+from .constants import IMAGE_PATH
 
 
 class DestinationSelector(ttk.Frame):
+    BROWSE_ICON = IMAGE_PATH + "folder_received.png"
+
     def __init__(self, master: tk.Misc, dst_var: tk.StringVar,
                  *args, **kwargs):
         kwargs['master'] = master
@@ -28,8 +31,10 @@ class DestinationSelector(ttk.Frame):
             self, textvariable=self.__dst_dir)
         self.dst_entry.grid(column=1, row=0, sticky=tk.EW, padx=5)
 
+        self.browse_icon = tk.PhotoImage(file=self.BROWSE_ICON)
         self.browse_btn = ttk.Button(
-            self, text="Browse...", command=self.__handle_browsebtn)
+            self, text="Browse...", command=self.__handle_browsebtn,
+            image=self.browse_icon, compound=tk.LEFT)
         self.browse_btn.grid(column=2, row=0, sticky=tk.W, padx=5)
 
     def __handle_browsebtn(self) -> None:
