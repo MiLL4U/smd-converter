@@ -7,10 +7,10 @@ from ibwpy.main import BinaryWave5
 from .notegen import IBWNoteGenerator
 from .smdparser import SimpledSMDParser, SpatialAxisName, SpectralUnit
 
-IBW_SPATIAL_AXIS: Tuple[SpatialAxisName, ...] = ('X', 'Y', 'Z')
-
 
 class SimpledSMDIBWConverter:
+    IBW_SPATIAL_AXIS: Tuple[SpatialAxisName, ...] = ('X', 'Y', 'Z')
+
     def __init__(self, smd_data: SimpledSMDParser) -> None:
         self.__smd_data = smd_data
 
@@ -31,7 +31,7 @@ class SimpledSMDIBWConverter:
         # set units and scales of axis
         spatial_units = self.smd_data.spatial_units
         spatial_scales = self.smd_data.spatial_scales
-        for i, axis in enumerate(IBW_SPATIAL_AXIS):
+        for i, axis in enumerate(self.IBW_SPATIAL_AXIS):
             ibw.set_axis_unit(i, spatial_units[axis])
             ibw.set_axis_scale(i, *spatial_scales[axis])
 

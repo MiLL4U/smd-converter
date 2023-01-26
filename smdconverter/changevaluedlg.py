@@ -6,7 +6,6 @@ from .constants import PADDING_OPTIONS
 from .okcancelbuttonarray import OKCancelButtonArray
 
 DEFAULT_LENGTH = 30
-DEFAULT_TITLE = "Edit value"
 
 
 def uniformize_grids(widget: tk.Misc, on_columns: bool = True,
@@ -30,7 +29,9 @@ def uniformize_grids(widget: tk.Misc, on_columns: bool = True,
 
 
 class ChangeValueDialog(tk.Toplevel):
+    DEFAULT_TITLE = "Edit value"
     # dialog to change values
+
     def __init__(self, master: tk.Misc,
                  descriptions: Tuple[str, ...], values: Tuple[str, ...],
                  changeable_flags: Tuple[bool, ...] = None,

@@ -24,34 +24,35 @@ from .opbtnarray import OperationButtonArray
 from .outputoptionsframe import OutputOptionsFrame
 from .settingwndw import SettingsWindow
 
-ROOT_TITLE = "SMD Converter"
-LAUNCH_MSG = f"{ROOT_TITLE} {VERSION}\n" + \
-    "Copyright (c) 2022 Hiroaki Takahashi.\n\n" + \
-    "Latest release is available at:\n  " + GITHUB_URL + "\n"
-
-FILE_TYPES = (
-    ("SMD spectral data", '*.smd'),
-    ("All files", '*.*'))
-
-# layout options
-SCRLBAR_COLUMN = 1  # column which contains scroll bar in main window
-
-# operation button array
-OPERATION_BUTTON_TEXTS = {'open': "Open...", 'remove': "Remove",
-                          'clear': "Clear", 'convert': "Convert",
-                          'settings': "Settings...", 'exit': "Exit"}
-
 
 class App(tkdnd.Tk):
+    ROOT_TITLE = "SMD Converter"
+    LAUNCH_MSG = f"{ROOT_TITLE} {VERSION}\n" + \
+        "Copyright (c) 2022 Hiroaki Takahashi.\n\n" + \
+        "Latest release is available at:\n  " + GITHUB_URL + "\n"
+    FILE_TYPES = (
+        ("SMD spectral data", '*.smd'),
+        ("All files", '*.*'))
+
+    # layout options
+    SCRLBAR_COLUMN = 1  # column which contains scroll bar in main window
+
+    # operation button array
+    OPERATION_BUTTON_TEXTS = {
+        'open': "Open...", 'remove': "Remove",
+        'clear': "Clear", 'convert': "Convert",
+        'settings': "Settings...", 'exit': "Exit"}
+
     def __init__(self) -> None:
         super().__init__()
-        print(LAUNCH_MSG)
+        print(self.LAUNCH_MSG)
 
-        self.title(f"{ROOT_TITLE} {VERSION}")
+        self.title(f"{self.ROOT_TITLE} {VERSION}")
 
         # grid settings
         self.columnconfigure(0, weight=1)  # column for widgets
-        self.columnconfigure(SCRLBAR_COLUMN, weight=0)  # column for scroll bar
+        # column for scroll bar
+        self.columnconfigure(self.SCRLBAR_COLUMN, weight=0)
 
         self.rowconfigure(0, weight=0)  # operation buttons
         self.rowconfigure(1, weight=1)  # list of jobs
@@ -84,7 +85,8 @@ class App(tkdnd.Tk):
             'exit': self.destroy}
 
         self.opbutton_arr = OperationButtonArray(
-            self, commands=op_commands, command_texts=OPERATION_BUTTON_TEXTS)
+            self, commands=op_commands,
+            command_texts=self.OPERATION_BUTTON_TEXTS)
         self.disable_opbuttons()
         self.opbutton_arr.grid(
             column=0, columnspan=2, row=0,
@@ -98,7 +100,7 @@ class App(tkdnd.Tk):
         # scroll bar of job list
         self.joblist_scrl = ttk.Scrollbar(
             self, orient=tk.VERTICAL, command=self.job_list.yview)
-        self.joblist_scrl.grid(column=SCRLBAR_COLUMN, row=1, sticky=tk.NS)
+        self.joblist_scrl.grid(column=self.SCRLBAR_COLUMN, row=1, sticky=tk.NS)
         self.job_list.config(yscrollcommand=self.joblist_scrl.set)
 
         # output options
@@ -123,7 +125,7 @@ class App(tkdnd.Tk):
     def __ask_filenames(self) -> Union[Tuple[str, ...], Literal['']]:
         filenames = askopenfilenames(
             title="Open files", initialdir='./',
-            filetypes=FILE_TYPES)
+            filetypes=self.FILE_TYPES)
         return filenames
 
     def clear_jobs(self) -> None:

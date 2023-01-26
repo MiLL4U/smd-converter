@@ -13,13 +13,13 @@ from .defaultsettings import DEFAULT_SETTINGS
 from .editabletree import ChangeableTreeFrame, EditableTreeFrame
 from .okcancelbuttonarray import OKCancelButtonArray
 
-TREE_HEIGHT = 5
-DIALOG_TITLE = "Edit name format"
-ENTRY_LENGTH = 30
-EMPTY_OK = False
-
 
 class SettingsWindow(tk.Toplevel):
+    TREE_HEIGHT = 5
+    DIALOG_TITLE = "Edit name format"
+    ENTRY_LENGTH = 30
+    EMPTY_OK = False
+
     def __init__(self, master: tk.Misc, settings: ApplicationSettings,
                  *args, **kwargs):
         kwargs['master'] = master
@@ -57,9 +57,9 @@ class SettingsWindow(tk.Toplevel):
             master=self, columns=SPECTRAL_DATA_FORMAT_COLUMNS,
             column_texts=SPECTRAL_DATA_FORMAT_COLUMN_TEXTS,
             values_dict=self.__new_settings.data_name_formats,
-            height=TREE_HEIGHT, changeable_flags=(True, True),
-            dialog_title=DIALOG_TITLE, entry_length=ENTRY_LENGTH,
-            empty_ok=EMPTY_OK, text="Wave name format (spectral data)")
+            height=self.TREE_HEIGHT, changeable_flags=(True, True),
+            dialog_title=self.DIALOG_TITLE, entry_length=self.ENTRY_LENGTH,
+            empty_ok=self.EMPTY_OK, text="Wave name format (spectral data)")
         self.data_fmt_frame.grid(
             column=0, row=1, sticky=tk.EW, **PADDING_OPTIONS)
 
@@ -71,8 +71,8 @@ class SettingsWindow(tk.Toplevel):
             values_dict=self.__new_settings.spectral_axis_name_formats,
             default_values=default_axis_fmt, height=5,
             changeable_flags=(False, True),
-            dialog_title=DIALOG_TITLE, entry_length=ENTRY_LENGTH,
-            empty_ok=EMPTY_OK, text="Wave name format (spectral axis)")
+            dialog_title=self.DIALOG_TITLE, entry_length=self.ENTRY_LENGTH,
+            empty_ok=self.EMPTY_OK, text="Wave name format (spectral axis)")
         self.axis_fmt_frame.grid(
             column=0, row=2, sticky=tk.EW, **PADDING_OPTIONS)
 
