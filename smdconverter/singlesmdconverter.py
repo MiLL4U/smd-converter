@@ -43,6 +43,15 @@ OPERATION_BUTTON_TEXTS = {'open': "Open...", 'remove': "Remove",
 
 
 class App(tkdnd.Tk):
+    OPERATION_BUTTON_ICONS = {  # ./image/...
+        'open': "folder_open.png", 'remove': "subtract.png",
+        'clear': "loader.png", 'convert': "check.png",
+        'settings': "settings.png", 'exit': "close.png"}
+    OPERATION_BUTTON_ICONS_DISABLED = {
+        'open': "folder_open_gray.png", 'remove': "subtract_gray.png",
+        'clear': "loader_gray.png", 'convert': "check_gray.png",
+        'settings': "settings_gray.png", 'exit': "close_gray.png"}
+
     def __init__(self) -> None:
         super().__init__()
         print(LAUNCH_MSG)
@@ -84,7 +93,10 @@ class App(tkdnd.Tk):
             'exit': self.destroy}
 
         self.opbutton_arr = OperationButtonArray(
-            self, commands=op_commands, command_texts=OPERATION_BUTTON_TEXTS)
+            self, commands=op_commands, command_texts=OPERATION_BUTTON_TEXTS,
+            command_icons=self.OPERATION_BUTTON_ICONS,
+            command_icons_disabled=self.OPERATION_BUTTON_ICONS_DISABLED
+            )
         self.disable_opbuttons()
         self.opbutton_arr.grid(
             column=0, columnspan=2, row=0,
