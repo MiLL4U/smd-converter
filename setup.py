@@ -12,9 +12,10 @@ setuptools.setup(
     install_requires=_requires_from_file('requirements.txt'),
     author="Hiroaki Takahashi",
     author_email="aphiloboe@gmail.com",
+    url="https://github.com/MiLL4U/smd-converter",
     description="GUI application to convert smd files into ibw files",
     packages=setuptools.find_packages(),
-    # TODO: add package_data
+    package_data={"smdconverter": ["image/*"]},
     classifiers=[
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: MIT License",
@@ -22,4 +23,3 @@ setuptools.setup(
     ],
     python_requires='>=3.7',
 )
-# TODO: add wheel package
