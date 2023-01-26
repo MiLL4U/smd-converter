@@ -3,10 +3,8 @@ from abc import ABCMeta, abstractmethod
 from tkinter import ttk
 from typing import Callable, Dict, Tuple, Union, cast
 
-from .changevaluedlg import DEFAULT_LENGTH, DEFAULT_TITLE, ChangeValueDialog
+from .changevaluedlg import DEFAULT_LENGTH, ChangeValueDialog
 from .constants import PADDING_OPTIONS
-
-BUTTON_WIDTH = 6
 
 
 class ChangeableTreeFrame(ttk.LabelFrame):
@@ -14,7 +12,7 @@ class ChangeableTreeFrame(ttk.LabelFrame):
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
                  default_values: Dict[str, str] = None,
                  height: int = 5, changeable_flags: Tuple[bool, ...] = None,
-                 dialog_title: str = DEFAULT_TITLE,
+                 dialog_title: str = ChangeValueDialog.DEFAULT_TITLE,
                  entry_length: int = DEFAULT_LENGTH,
                  empty_ok: bool = False,
                  *args, **kwargs) -> None:
@@ -115,7 +113,7 @@ class EditableTreeFrame(ChangeableTreeFrame):
     def __init__(self, master: tk.Misc, columns: Tuple[str, ...],
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
                  height: int = 5, changeable_flags: Tuple[bool, ...] = None,
-                 dialog_title: str = DEFAULT_TITLE,
+                 dialog_title: str = ChangeValueDialog.DEFAULT_TITLE,
                  entry_length: int = DEFAULT_LENGTH,
                  empty_ok: bool = False, *args, **kwargs) -> None:
         kwargs['master'] = master
@@ -212,6 +210,8 @@ class ChangeableTree(ttk.Treeview):
 
 
 class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
+    BUTTON_WIDTH = 6
+
     def __init__(self, master: tk.Misc, target_tree: ChangeableTree,
                  edit_cmd: Callable[[], None] = None,
                  *args, **kwargs) -> None:
@@ -226,7 +226,7 @@ class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
     def __create_widgets(self) -> None:
         self.edit_btn = ttk.Button(
             self, text="Edit", command=self.__handle_edit_btn,
-            state=tk.DISABLED, width=BUTTON_WIDTH)
+            state=tk.DISABLED, width=self.BUTTON_WIDTH)
         self.edit_btn.pack(side=tk.RIGHT)
 
     @abstractmethod
@@ -272,7 +272,7 @@ class ChangeTreeButtonArray(TreeButtonArray):
     def create_additional_widgets(self) -> None:
         self.reset_btn = ttk.Button(
             self, text="Reset", command=self.__handle_reset_btn,
-            state=tk.DISABLED, width=BUTTON_WIDTH)
+            state=tk.DISABLED, width=self.BUTTON_WIDTH)
         self.reset_btn.pack(side=tk.RIGHT)
 
     def enable_additional_buttons(self) -> None:
@@ -304,12 +304,12 @@ class EditTreeButtonArray(TreeButtonArray):
     def create_additional_widgets(self) -> None:
         self.del_btn = ttk.Button(
             self, text="-", command=self.__handle_del_btn,
-            state=tk.DISABLED, width=BUTTON_WIDTH)
+            state=tk.DISABLED, width=self.BUTTON_WIDTH)
         self.del_btn.pack(side=tk.RIGHT)
 
         self.add_btn = ttk.Button(
             self, text="+", command=self.__handle_add_btn,
-            width=BUTTON_WIDTH)
+            width=self.BUTTON_WIDTH)
         self.add_btn.pack(side=tk.RIGHT)
 
     def enable_additional_buttons(self) -> None:
