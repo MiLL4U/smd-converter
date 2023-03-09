@@ -28,7 +28,7 @@ from .settingwndw import SettingsWindow
 class App(tkdnd.Tk):
     ROOT_TITLE = "SMD Converter"
     LAUNCH_MSG = f"{ROOT_TITLE} {VERSION}\n" + \
-        "Copyright (c) 2022 Hiroaki Takahashi.\n\n" + \
+        "Copyright (c) 2022-2023 Hiroaki Takahashi.\n\n" + \
         "Latest release is available at:\n  " + GITHUB_URL + "\n"
     FILE_TYPES = (
         ("SMD spectral data", '*.smd'),
