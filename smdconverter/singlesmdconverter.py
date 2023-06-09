@@ -26,6 +26,8 @@ from .settingwndw import SettingsWindow
 
 
 class App(tkdnd.Tk):
+    """Main window of SMD Converter
+    """
     ROOT_TITLE = "SMD Converter"
     LAUNCH_MSG = f"{ROOT_TITLE} {VERSION}\n" + \
         "Copyright (c) 2022-2023 Hiroaki Takahashi.\n\n" + \

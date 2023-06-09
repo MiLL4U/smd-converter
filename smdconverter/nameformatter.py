@@ -7,6 +7,9 @@ from .convertjob import ConvertJob
 
 
 class IBWNameFormatter:
+    """Class that validates the name of an Igor binary wave and formats it to
+    the appropriate name
+    """
     DEFAULT_NAME_FMT = "wave{}"
 
     def __init__(self, job: ConvertJob, settings: ApplicationSettings,
