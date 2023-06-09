@@ -1,6 +1,8 @@
 # SMD Converter
 GUI application to convert smd files to [Igor Pro](https://www.wavemetrics.com/) files (Igor binary wave)
 
+![Main window of SMD converter](image/screenshot_main_window.png "Screen shot of main window")
+
 ## Requirements
 - [ibwpy](https://github.com/MiLL4U/ibwpy) (library to Read/Write Igor binary waves)
 
