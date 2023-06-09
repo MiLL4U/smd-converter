@@ -15,6 +15,9 @@ from .smdparser import SPECTRAL_UNITS, SpectralUnit
 
 
 class OutputOptionsFrame(ttk.LabelFrame):
+    """Frame for specifying settings related to output data
+    """
+
     SAVE_ICON_ENABLED = IMAGE_PATH + "save.png"
     SAVE_ICON_DISABLED = IMAGE_PATH + "save_gray.png"
 

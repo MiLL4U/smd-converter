@@ -29,6 +29,8 @@ def uniformize_grids(widget: tk.Misc, on_columns: bool = True,
 
 
 class ChangeValueDialog(tk.Toplevel):
+    """Dialog for user to change setting values.
+    """
     DEFAULT_TITLE = "Edit value"
     # dialog to change values
 
@@ -120,6 +122,9 @@ class ChangeValueDialog(tk.Toplevel):
 
 
 class ChangeValueFrame(ttk.Frame):
+    """Frame for user to change setting values
+    """
+
     def __init__(self, master: tk.Misc,
                  descriptions: Tuple[str, ...], values: Tuple[str, ...],
                  changeable_flags: Tuple[bool, ...],
