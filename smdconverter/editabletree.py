@@ -8,6 +8,11 @@ from .constants import IMAGE_PATH, PADDING_OPTIONS
 
 
 class ChangeableTreeFrame(ttk.LabelFrame):
+    """A frame with a table of configuration values and buttons for editing the
+    configuration values. It is only possible to modify existing configuration
+    values, not to add or delete items.
+    """
+
     def __init__(self, master: tk.Misc, columns: Tuple[str, ...],
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
                  default_values: Dict[str, str] = None,
@@ -109,7 +114,11 @@ class ChangeableTreeFrame(ttk.LabelFrame):
 
 
 class EditableTreeFrame(ChangeableTreeFrame):
-    # with add and remove button
+    """A frame with a table of configuration values and buttons for editing
+    the configuration values. New items can be added and items can be
+    deleted.
+    """
+
     def __init__(self, master: tk.Misc, columns: Tuple[str, ...],
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
                  height: int = 5, changeable_flags: Tuple[bool, ...] = None,
@@ -163,7 +172,10 @@ class EditableTreeFrame(ChangeableTreeFrame):
 
 
 class ChangeableTree(ttk.Treeview):
+    """A table that allows one to select an item and update its contents.
+    """
     # open value change window when items are double-clicked
+
     def __init__(self, master: tk.Misc, columns: Tuple[str, ...],
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
                  select_cmd: Callable[[], None] = None,
@@ -210,6 +222,8 @@ class ChangeableTree(ttk.Treeview):
 
 
 class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
+    """A frame that provides buttons for changing the contents of the table.
+    """
     EDIT_ICON_ENABLED = IMAGE_PATH + "edit.png"
     EDIT_ICON_DISABLED = IMAGE_PATH + "edit_gray.png"
 
@@ -262,6 +276,9 @@ class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
 
 
 class ChangeTreeButtonArray(TreeButtonArray):
+    """A frame that provides buttons for changing the contents of the table.
+    Includes a button to reset the configuration items to their default values.
+    """
     RESET_ICON_ENABLED = IMAGE_PATH + "restart.png"
     RESET_ICON_DISABLED = IMAGE_PATH + "restart_gray.png"
 
@@ -302,6 +319,9 @@ class ChangeTreeButtonArray(TreeButtonArray):
 
 
 class EditTreeButtonArray(TreeButtonArray):
+    """A frame that provides buttons for changing the contents of the table.
+    Includes buttons for adding or deleting configuration items.
+    """
     ADD_ICON_ENABLED = IMAGE_PATH + "add.png"
     ADD_ICON_DISABLED = IMAGE_PATH + "add_gray.png"
     DELETE_ICON_ENABLED = IMAGE_PATH + "subtract.png"

@@ -15,6 +15,9 @@ from .okcancelbuttonarray import OKCancelButtonArray
 
 
 class SettingsWindow(tk.Toplevel):
+    """Window for change settings of SMD Converter
+    """
+
     TREE_HEIGHT = 5
     DIALOG_TITLE = "Edit name format"
     ENTRY_LENGTH = 30
@@ -100,6 +103,9 @@ class SettingsWindow(tk.Toplevel):
 
 
 class GeneralSettingsFrame(ttk.LabelFrame):
+    """Frame to display checkboxes to toggle general settings
+    """
+
     def __init__(self, master: tk.Misc, settings: ApplicationSettings,
                  *args, **kwargs) -> None:
         kwargs['master'] = master

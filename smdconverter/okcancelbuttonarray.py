@@ -9,6 +9,15 @@ class OKCancelButtonArray(ttk.Frame):
     def __init__(self, master: tk.Misc, ok_command: Callable[[], None],
                  cancel_command: Callable[[], None],
                  *args, **kwargs) -> None:
+        """Array of buttons for user to perform OK or Cancel operations
+
+        Args:
+            master (tk.Misc): container of this widget
+            ok_command (Callable[[], None]):
+                Function called when the OK button is pressed
+            cancel_command (Callable[[], None]):
+                Function called when the Cancel button is pressed
+        """
         kwargs['master'] = master
         super().__init__(*args, **kwargs)
         self.__ok_cmd = ok_command
