@@ -5,7 +5,7 @@ import os
 from typing import Tuple
 
 import numpy as np
-from ibwpy.main import BinaryWave5
+from ibwpy import BinaryWave5
 
 from .smdibwcnv import SimpledSMDIBWConverter
 from .smdparser import SimpledSMDParser, SpectralUnit

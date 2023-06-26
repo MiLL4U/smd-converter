@@ -10,7 +10,7 @@ from tkinter.messagebox import askyesno, showerror, showinfo
 from typing import Callable, Dict, List, Tuple, Union
 
 import tkinterdnd2 as tkdnd
-from ibwpy.main import BinaryWaveHeader5
+from ibwpy import BinaryWaveHeader5
 from typing_extensions import Literal
 
 from .appsettings import ApplicationSettingsHandler

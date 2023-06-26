@@ -2,7 +2,7 @@ from typing import Tuple
 
 import ibwpy as ip
 import numpy as np
-from ibwpy.main import BinaryWave5
+from ibwpy import BinaryWave5
 
 from .notegen import IBWNoteGenerator
 from .smdparser import SimpledSMDParser, SpatialAxisName, SpectralUnit
