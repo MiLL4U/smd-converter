@@ -10,7 +10,7 @@ from tkinter.messagebox import askyesno, showerror, showinfo
 from typing import Callable, Dict, List, Tuple, Union
 
 import tkinterdnd2 as tkdnd
-from ibwpy.main import BinaryWaveHeader5
+from ibwpy import BinaryWaveHeader5
 from typing_extensions import Literal
 
 from .appsettings import ApplicationSettingsHandler
@@ -26,9 +26,11 @@ from .settingwndw import SettingsWindow
 
 
 class App(tkdnd.Tk):
+    """Main window of SMD Converter
+    """
     ROOT_TITLE = "SMD Converter"
     LAUNCH_MSG = f"{ROOT_TITLE} {VERSION}\n" + \
-        "Copyright (c) 2022 Hiroaki Takahashi.\n\n" + \
+        "Copyright (c) 2022-2023 Hiroaki Takahashi.\n\n" + \
         "Latest release is available at:\n  " + GITHUB_URL + "\n"
     FILE_TYPES = (
         ("SMD spectral data", '*.smd'),

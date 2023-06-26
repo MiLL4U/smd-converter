@@ -2,13 +2,15 @@ from typing import Tuple
 
 import ibwpy as ip
 import numpy as np
-from ibwpy.main import BinaryWave5
+from ibwpy import BinaryWave5
 
 from .notegen import IBWNoteGenerator
 from .smdparser import SimpledSMDParser, SpatialAxisName, SpectralUnit
 
 
 class SimpledSMDIBWConverter:
+    """Class for converting SMD file measurement data to IBW data
+    """
     IBW_SPATIAL_AXIS: Tuple[SpatialAxisName, ...] = ('X', 'Y', 'Z')
 
     def __init__(self, smd_data: SimpledSMDParser) -> None:

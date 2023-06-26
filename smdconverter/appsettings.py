@@ -11,6 +11,9 @@ JSON_INDENT = 4
 
 
 class ApplicationSettings:
+    """Class for storing SMD Converter configuration values
+    """
+
     def __init__(self, settings_dict: Dict[str, Any], json_path: str) -> None:
         self.__settings_dict = settings_dict
         self.__json_path = json_path
@@ -60,6 +63,10 @@ class ApplicationSettings:
 
 
 class ApplicationSettingsHandler:
+    """Class for managing json files that store SMD Converter configuration
+    values
+    """
+
     def __init__(self, json_path: str = SETTINGS_JSON_PATH) -> None:
         self.__json_path = json_path
 

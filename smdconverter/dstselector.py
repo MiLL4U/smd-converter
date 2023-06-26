@@ -6,6 +6,8 @@ from .constants import IMAGE_PATH
 
 
 class DestinationSelector(ttk.Frame):
+    """Frame for the user to specify where to save the output files.
+    """
     BROWSE_ICON = IMAGE_PATH + "folder_received.png"
 
     def __init__(self, master: tk.Misc, dst_var: tk.StringVar,

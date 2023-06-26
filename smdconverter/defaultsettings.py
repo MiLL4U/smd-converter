@@ -1,3 +1,7 @@
+"""
+Default settings for SMD Converter
+"""
+
 DEFAULT_SETTINGS = {
     "general": {
         "loadMultipleDetectors": True,

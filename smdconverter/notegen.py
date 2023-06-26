@@ -2,6 +2,9 @@ from .smdparser import ChannelInfo, SimpledSMDParser
 
 
 class IBWNoteGenerator:
+    """Class for generating ibw file notes automatically from information in
+    smd file
+    """
     DEFAULT_DETECTOR_ID = 0
     DATETIME_FMT = "%Y/%m/%d %H:%M:%S"
     HEADING_FMT = "<{}>\n"
@@ -62,7 +65,8 @@ class IBWNoteGenerator:
         item_1 = self.ITEM_LV1_FMT.format("Groove number", str(grating_groove))
 
         central_wl = self.__smd_data.central_wavelength
-        item_2 = self.ITEM_LV1_FMT.format("Central wavelength", str(central_wl))
+        item_2 = self.ITEM_LV1_FMT.format(
+            "Central wavelength", str(central_wl))
 
         content = item_1 + item_2
         res = heading + content
