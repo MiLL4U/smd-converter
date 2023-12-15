@@ -1,7 +1,7 @@
 import tkinter as tk
 from copy import deepcopy
 from tkinter import ttk
-from typing import Dict, cast
+from typing import Dict, Optional, cast
 
 from .appsettings import ApplicationSettings
 from .constants import (FORMAT_DESCRIPTION, PADDING_OPTIONS,
@@ -91,13 +91,13 @@ class SettingsWindow(tk.Toplevel):
         self.okcancel_btns.grid(
             column=0, row=4, sticky=tk.EW)
 
-    def __handle_ok_btn(self, event: tk.Event = None) -> None:
+    def __handle_ok_btn(self, event: Optional[tk.Event] = None) -> None:
         self.__current_settings.overwrite_settings(self.__new_settings)
         self.__current_settings.save()
         print("Information: Applied setting changes.")
         self.destroy()
 
-    def __handle_cancel_btn(self, event: tk.Event = None) -> None:
+    def __handle_cancel_btn(self, event: Optional[tk.Event] = None) -> None:
         print("Information: Discarded setting changes.")
         self.destroy()
 

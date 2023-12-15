@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
-from typing import Callable, Tuple, Union
+from typing import Callable, Optional, Tuple, Union
 
 from .constants import PADDING_OPTIONS
 from .okcancelbuttonarray import OKCancelButtonArray
@@ -36,7 +36,7 @@ class ChangeValueDialog(tk.Toplevel):
 
     def __init__(self, master: tk.Misc,
                  descriptions: Tuple[str, ...], values: Tuple[str, ...],
-                 changeable_flags: Tuple[bool, ...] = None,
+                 changeable_flags: Optional[Tuple[bool, ...]] = None,
                  title: str = DEFAULT_TITLE, entry_length: int = DEFAULT_LENGTH,
                  empty_ok: bool = False, *args, **kwargs) -> None:
         kwargs['master'] = master
@@ -89,19 +89,19 @@ class ChangeValueDialog(tk.Toplevel):
     def values(self) -> Tuple[str, ...]:
         return self.values_frame.values
 
-    def __ok_command(self, event: tk.Event = None) -> None:
+    def __ok_command(self, event: Optional[tk.Event] = None) -> None:
         self.__values = self.values
         self.destroy()
 
-    def __cancel_command(self, event: tk.Event = None) -> None:
+    def __cancel_command(self, event: Optional[tk.Event] = None) -> None:
         self.__values = None
         self.destroy()
 
-    def __handle_return_key(self, event: tk.Event = None) -> None:
+    def __handle_return_key(self, event: Optional[tk.Event] = None) -> None:
         if self.validate_values():
             self.__ok_command()
 
-    def __update_widgets(self, event: tk.Event = None) -> None:
+    def __update_widgets(self, event: Optional[tk.Event] = None) -> None:
         if self.validate_values():
             self.okcancel_btns.enable_ok_btn()
         else:
@@ -129,7 +129,7 @@ class ChangeValueFrame(ttk.Frame):
                  descriptions: Tuple[str, ...], values: Tuple[str, ...],
                  changeable_flags: Tuple[bool, ...],
                  entry_length: int = DEFAULT_LENGTH,
-                 entry_command: Callable[[tk.Event], None] = None,
+                 entry_command: Optional[Callable[[tk.Event], None]] = None,
                  *args, **kwargs) -> None:
         kwargs['master'] = master
         super().__init__(*args, **kwargs)
