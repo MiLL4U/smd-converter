@@ -1,7 +1,7 @@
 import tkinter as tk
 from abc import ABCMeta, abstractmethod
 from tkinter import ttk
-from typing import Callable, Dict, Tuple, Union, cast
+from typing import Callable, Dict, Optional, Tuple, Union, cast
 
 from .changevaluedlg import DEFAULT_LENGTH, ChangeValueDialog
 from .constants import IMAGE_PATH, PADDING_OPTIONS
@@ -15,8 +15,9 @@ class ChangeableTreeFrame(ttk.LabelFrame):
 
     def __init__(self, master: tk.Misc, columns: Tuple[str, ...],
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
-                 default_values: Dict[str, str] = None,
-                 height: int = 5, changeable_flags: Tuple[bool, ...] = None,
+                 default_values: Optional[Dict[str, str]] = None,
+                 height: int = 5,
+                 changeable_flags: Optional[Tuple[bool, ...]] = None,
                  dialog_title: str = ChangeValueDialog.DEFAULT_TITLE,
                  entry_length: int = DEFAULT_LENGTH,
                  empty_ok: bool = False,
@@ -121,7 +122,8 @@ class EditableTreeFrame(ChangeableTreeFrame):
 
     def __init__(self, master: tk.Misc, columns: Tuple[str, ...],
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
-                 height: int = 5, changeable_flags: Tuple[bool, ...] = None,
+                 height: int = 5,
+                 changeable_flags: Optional[Tuple[bool, ...]] = None,
                  dialog_title: str = ChangeValueDialog.DEFAULT_TITLE,
                  entry_length: int = DEFAULT_LENGTH,
                  empty_ok: bool = False, *args, **kwargs) -> None:
@@ -178,7 +180,7 @@ class ChangeableTree(ttk.Treeview):
 
     def __init__(self, master: tk.Misc, columns: Tuple[str, ...],
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
-                 select_cmd: Callable[[], None] = None,
+                 select_cmd: Optional[Callable[[], None]] = None,
                  *args, **kwargs) -> None:
         self.__columns = columns
         self.__column_texts = column_texts
@@ -230,7 +232,7 @@ class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
     BUTTON_WIDTH = 6
 
     def __init__(self, master: tk.Misc, target_tree: ChangeableTree,
-                 edit_cmd: Callable[[], None] = None,
+                 edit_cmd: Optional[Callable[[], None]] = None,
                  *args, **kwargs) -> None:
         kwargs['master'] = master
         super().__init__(*args, **kwargs)
@@ -283,8 +285,8 @@ class ChangeTreeButtonArray(TreeButtonArray):
     RESET_ICON_DISABLED = IMAGE_PATH + "restart_gray.png"
 
     def __init__(self, master: tk.Misc, target_tree: ChangeableTree,
-                 edit_cmd: Callable[[], None] = None,
-                 reset_cmd: Callable[[], None] = None,
+                 edit_cmd: Optional[Callable[[], None]] = None,
+                 reset_cmd: Optional[Callable[[], None]] = None,
                  is_resettable: bool = True,
                  *args, **kwargs) -> None:
         kwargs['master'] = master
@@ -328,9 +330,9 @@ class EditTreeButtonArray(TreeButtonArray):
     DELETE_ICON_DISABLED = IMAGE_PATH + "subtract_gray.png"
 
     def __init__(self, master: tk.Misc, target_tree: ChangeableTree,
-                 edit_cmd: Callable[[], None] = None,
-                 add_cmd: Callable[[], None] = None,
-                 del_cmd: Callable[[], None] = None,
+                 edit_cmd: Optional[Callable[[], None]] = None,
+                 add_cmd: Optional[Callable[[], None]] = None,
+                 del_cmd: Optional[Callable[[], None]] = None,
                  *args, **kwargs) -> None:
         kwargs['master'] = master
         kwargs['target_tree'] = target_tree

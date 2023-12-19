@@ -1,4 +1,4 @@
-from typing import Tuple
+from typing import Optional, Tuple
 
 import ibwpy as ip
 import numpy as np
@@ -52,7 +52,7 @@ class SimpledSMDIBWConverter:
         # ibw.set_data_unit(unit)
         return ibw
 
-    def __make_note(self, detector_id: int = None) -> str:
+    def __make_note(self, detector_id: Optional[int] = None) -> str:
         """generate note of ibw"""
         generator = IBWNoteGenerator(self.smd_data)
         if detector_id:

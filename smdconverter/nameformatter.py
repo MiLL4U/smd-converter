@@ -1,6 +1,6 @@
 import datetime
 import os
-from typing import Tuple
+from typing import Optional, Tuple
 
 from .appsettings import ApplicationSettings
 from .convertjob import ConvertJob
@@ -98,7 +98,7 @@ class SpectralDataIBWNameFormatter(IBWNameFormatter):
                  print_warning: bool = True) -> None:
         super().__init__(job, settings, print_warning)
 
-    def get_name(self, exist_names: Tuple[str, ...] = None) -> str:
+    def get_name(self, exist_names: Optional[Tuple[str, ...]] = None) -> str:
         detector_name = self.job.selected_detector_name
         try:
             name_fmt = self.settings.data_name_formats[detector_name]
