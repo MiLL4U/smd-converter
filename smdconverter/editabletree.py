@@ -211,15 +211,19 @@ class ChangeableTree(ttk.Treeview):
             self.insert('', tk.END, values=row)
 
     @property
-    def selected_content(self) -> Tuple[str, str]:
-        res = self.item(self.selection()[0], 'values')
+    def selected_content(self) -> Optional[Tuple[str, str]]:
+        selection = self.selection()
+        if not selection:
+            return None
+        res = self.item(selection[0], 'values')
         return cast(Tuple[str, str], res)  # returns (key, value)
 
     def reset_contents(self) -> None:
         self.delete(*self.get_children())
 
     def __handle_item_select(self, event: tk.Event) -> None:
-        if self.__select_cmd:
+        selection = self.selected_content
+        if self.__select_cmd and selection:
             self.__select_cmd()
 
 
