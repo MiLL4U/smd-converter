@@ -85,7 +85,10 @@ class ChangeableTreeFrame(ttk.LabelFrame):
 
     def reset_selected_item(self) -> None:
         if self.tree and self.__default_values:
-            key = self.tree.selected_content[0]
+            selected_content = self.tree.selected_content
+            if not selected_content:
+                return
+            key = selected_content[0]
             try:
                 self.values_dict[key] = self.__default_values[key]
             except KeyError:
@@ -96,6 +99,8 @@ class ChangeableTreeFrame(ttk.LabelFrame):
     def edit_item(self) -> None:
         if self.tree:
             selected_content = self.tree.selected_content
+            if not selected_content:
+                return
             selected_key = selected_content[0]
             dialog = ChangeValueDialog(
                 master=self, descriptions=self.column_texts,
@@ -167,7 +172,10 @@ class EditableTreeFrame(ChangeableTreeFrame):
 
     def delete_selected_item(self) -> None:
         if self.tree:
-            selected_key = self.tree.selected_content[0]
+            selected_content = self.tree.selected_content
+            if not selected_content:
+                return
+            selected_key = selected_content[0]
             del self.values_dict[selected_key]
             self.tree.update_contents()
             self.btn_array.disable_buttons()
@@ -222,8 +230,7 @@ class ChangeableTree(ttk.Treeview):
         self.delete(*self.get_children())
 
     def __handle_item_select(self, event: tk.Event) -> None:
-        selection = self.selected_content
-        if self.__select_cmd and selection:
+        if self.__select_cmd and self.selected_content:
             self.__select_cmd()
 
 
