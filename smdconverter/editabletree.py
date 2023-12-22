@@ -63,7 +63,8 @@ class ChangeableTreeFrame(ttk.LabelFrame):
             master=self, columns=self.__columns,
             column_texts=self.__column_texts,
             values_dict=self.__values_dict, height=self.__height,
-            select_cmd=self.btn_array.enable_buttons)
+            select_cmd=self.btn_array.enable_buttons,
+            edit_cmd=self.edit_item)
         self.tree.grid(
             column=0, row=0, sticky=tk.NSEW)
 
@@ -189,10 +190,12 @@ class ChangeableTree(ttk.Treeview):
     def __init__(self, master: tk.Misc, columns: Tuple[str, ...],
                  column_texts: Dict[str, str], values_dict: Dict[str, str],
                  select_cmd: Optional[Callable[[], None]] = None,
+                 edit_cmd: Optional[Callable[[], None]] = None,
                  *args, **kwargs) -> None:
         self.__columns = columns
         self.__column_texts = column_texts
         self.__select_cmd = select_cmd
+        self.__edit_cmd = edit_cmd
 
         kwargs['master'] = master
         kwargs['columns'] = self.__columns
@@ -200,6 +203,7 @@ class ChangeableTree(ttk.Treeview):
             selectmode=tk.BROWSE,
             show='headings', *args, **kwargs)
         self.bind('<<TreeviewSelect>>', self.__handle_item_select)
+        self.bind('<Double-Button-1>', self.__handle_doubleclick)
 
         # variables
         self.__values_dict = values_dict
@@ -232,6 +236,10 @@ class ChangeableTree(ttk.Treeview):
     def __handle_item_select(self, event: tk.Event) -> None:
         if self.__select_cmd and self.selected_content:
             self.__select_cmd()
+
+    def __handle_doubleclick(self, event: tk.Event) -> None:
+        if self.__edit_cmd and self.selected_content:
+            self.__edit_cmd()
 
 
 class TreeButtonArray(ttk.Frame, metaclass=ABCMeta):
