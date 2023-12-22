@@ -14,9 +14,9 @@ def uniformize_grids(widget: tk.Misc, on_columns: bool = True,
 
     Args:
         widget (tk.Misc): widget which settings to be changed
-        on_row (bool, optional): Whether to apply to rows.
+        on_rows (bool, optional): Whether to apply to rows.
                                  Defaults to True.
-        on_column (bool, optional): Whether to apply to columns.
+        on_columns (bool, optional): Whether to apply to columns.
                                     Defaults to True.
     """
     columns, rows = widget.grid_size()
